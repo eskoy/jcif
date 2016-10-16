@@ -7,7 +7,7 @@ import java.util.Random;
 
 import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
-import com.jcif.opengl.GlBufferFactory.ACCESS;
+import com.jcif.opengl.GlBufferFactory.GL_ACCESS;
 import com.jcif.opengl.computeshader.histo.Histo2d;
 import com.jogamp.opengl.GL4;
 
@@ -26,7 +26,7 @@ public class Histo2dComputeHandler {
 		GlBuffer histo = compute.histogram2D(gl, gpuSrc_indices, size, gpuSrc_valuesA, min, max, nbins, gpuSrc_valuesB,
 				min, max, nbins);
 		histo.bind(gl);
-		IntBuffer histoData = (histo.mapRange(gl, ACCESS.READ_ONLY, 0, nbins * nbins * Integer.BYTES)).asIntBuffer();
+		IntBuffer histoData = (histo.mapRange(gl, GL_ACCESS.READ_ONLY, 0, nbins * nbins * Integer.BYTES)).asIntBuffer();
 		return histoData;
 	}
 

@@ -8,9 +8,9 @@ import java.util.Random;
 import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
 import com.jcif.opengl.GlSharedContextInstance;
-import com.jcif.opengl.GlBufferFactory.ACCESS;
-import com.jcif.opengl.GlBufferFactory.TYPE;
-import com.jcif.opengl.GlBufferFactory.USAGE;
+import com.jcif.opengl.GlBufferFactory.GL_ACCESS;
+import com.jcif.opengl.GlBufferFactory.GL_TYPE;
+import com.jcif.opengl.GlBufferFactory.GL_USAGE;
 import com.jcif.opengl.computeshader.histo.Histo1d;
 import com.jogamp.nativewindow.AbstractGraphicsDevice;
 import com.jogamp.opengl.GL4;
@@ -44,13 +44,13 @@ public class Histo1dDemo {
 		ByteBuffer bbdata = createNewData(size);
 		ByteBuffer bb = createIndices(size);
 
-		GlBuffer gpuSrc_values = GlBufferFactory.newGLBuffer(gl, TYPE.ARRAY_BUFFER, USAGE.STATIC_DRAW);
+		GlBuffer gpuSrc_values = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
 
 		gpuSrc_values.bind(gl);
 		gpuSrc_values.allocate(gl, bbdata, bbdata.capacity());
 		gpuSrc_values.release(gl);
 
-		GlBuffer gpuSrc_indices = GlBufferFactory.newGLBuffer(gl, TYPE.ARRAY_BUFFER, USAGE.STATIC_DRAW);
+		GlBuffer gpuSrc_indices = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
 
 		gpuSrc_indices.bind(gl);
 		gpuSrc_indices.allocate(gl, bb, bb.capacity());
@@ -60,7 +60,7 @@ public class Histo1dDemo {
 
 		GlBuffer histo = computeHandler.histogram1D(gl, gpuSrc_indices, size, gpuSrc_values, min, max, nbins);
 		histo.bind(gl);
-		IntBuffer histoData = (histo.mapRange(gl, ACCESS.READ_ONLY, 0, 10 * Integer.BYTES)).asIntBuffer();
+		IntBuffer histoData = (histo.mapRange(gl, GL_ACCESS.READ_ONLY, 0, 10 * Integer.BYTES)).asIntBuffer();
 		histo.unmap(gl);
 		histo.release(gl);
 

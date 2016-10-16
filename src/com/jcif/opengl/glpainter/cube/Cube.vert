@@ -1,6 +1,3 @@
-#version 430 core
-
-
 in vec3  attribute_Position; 
 
 uniform mat4 viewMatrix, projMatrix;

@@ -1,5 +1,3 @@
-#version 430 core
-
 #define GROUP_COUNT 4096
 #define GROUP_SIZE 512
 #define GRID_SIZE   (GROUP_COUNT*GROUP_SIZE)

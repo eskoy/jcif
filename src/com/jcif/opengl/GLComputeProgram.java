@@ -9,7 +9,7 @@ public class GLComputeProgram extends GLProgram {
 	public GLComputeProgram(GL4 gl, String compute) {
 		super(gl);
 
-		computeShader = new GLShader(GL4.GL_COMPUTE_SHADER, compute, gl);
+		computeShader = new GLShader(GL4.GL_COMPUTE_SHADER, gl, compute);
 
 		gl.glAttachShader(this.getId(), computeShader.getId());
 

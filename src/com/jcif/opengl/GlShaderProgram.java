@@ -15,8 +15,8 @@ public class GlShaderProgram extends GLProgram {
 
 	public GlShaderProgram(GL4 gl, String vertex, String fragment) {
 		super(gl);
-		vertShader = new GLShader(GL4.GL_VERTEX_SHADER, vertex, gl);
-		fragShader = new GLShader(GL4.GL_FRAGMENT_SHADER, fragment, gl);
+		vertShader = new GLShader(GL4.GL_VERTEX_SHADER, gl, vertex);
+		fragShader = new GLShader(GL4.GL_FRAGMENT_SHADER, gl, fragment);
 		gl.glAttachShader(this.getId(), vertShader.getId());
 		gl.glAttachShader(this.getId(), fragShader.getId());
 		gl.glLinkProgram(this.getId());

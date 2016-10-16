@@ -8,9 +8,9 @@ import java.util.Random;
 import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
 import com.jcif.opengl.GlSharedContextInstance;
-import com.jcif.opengl.GlBufferFactory.ACCESS;
-import com.jcif.opengl.GlBufferFactory.TYPE;
-import com.jcif.opengl.GlBufferFactory.USAGE;
+import com.jcif.opengl.GlBufferFactory.GL_ACCESS;
+import com.jcif.opengl.GlBufferFactory.GL_TYPE;
+import com.jcif.opengl.GlBufferFactory.GL_USAGE;
 import com.jcif.opengl.computeshader.histo.Histo2d;
 import com.jogamp.nativewindow.AbstractGraphicsDevice;
 import com.jogamp.opengl.GL4;
@@ -47,17 +47,17 @@ public class Histo2dDemo {
 		ByteBuffer bbdataB = createNewData(size);
 		ByteBuffer bb = createIndices(size);
 
-		GlBuffer gpuSrc_valuesB = GlBufferFactory.newGLBuffer(gl, TYPE.ARRAY_BUFFER, USAGE.STATIC_DRAW);
+		GlBuffer gpuSrc_valuesB = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
 		gpuSrc_valuesB.bind(gl);
 		gpuSrc_valuesB.allocate(gl, bbdataB, bbdataB.capacity());
 		gpuSrc_valuesB.release(gl);
 
-		GlBuffer gpuSrc_valuesA = GlBufferFactory.newGLBuffer(gl, TYPE.ARRAY_BUFFER, USAGE.STATIC_DRAW);
+		GlBuffer gpuSrc_valuesA = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
 		gpuSrc_valuesA.bind(gl);
 		gpuSrc_valuesA.allocate(gl, bbdataA, bbdataA.capacity());
 		gpuSrc_valuesA.release(gl);
 
-		GlBuffer gpuSrc_indices = GlBufferFactory.newGLBuffer(gl, TYPE.ARRAY_BUFFER, USAGE.STATIC_DRAW);
+		GlBuffer gpuSrc_indices = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
 		gpuSrc_indices.bind(gl);
 		gpuSrc_indices.allocate(gl, bb, bb.capacity());
 		gpuSrc_indices.release(gl);
@@ -67,7 +67,7 @@ public class Histo2dDemo {
 		GlBuffer histo = computeHandler.histogram2D(gl, gpuSrc_indices, size, gpuSrc_valuesA, min, max, nbins,
 				gpuSrc_valuesB, min, max, nbins);
 		histo.bind(gl);
-		IntBuffer histoData = (histo.mapRange(gl, ACCESS.READ_ONLY, 0, 10 * 10 * Integer.BYTES)).asIntBuffer();
+		IntBuffer histoData = (histo.mapRange(gl, GL_ACCESS.READ_ONLY, 0, 10 * 10 * Integer.BYTES)).asIntBuffer();
 		histo.unmap(gl);
 		histo.release(gl);
 

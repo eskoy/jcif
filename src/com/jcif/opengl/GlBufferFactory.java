@@ -21,7 +21,7 @@ public abstract class GlBufferFactory {
 	 * \c{glTexImage2D()}). Not supported under OpenGL/ES.0
 	 **/
 
-	public enum TYPE {
+	public enum GL_TYPE {
 
 		ARRAY_BUFFER(GL4.GL_ARRAY_BUFFER), //
 		ATOMIC_COUNTER_BUFFER(GL4.GL_ATOMIC_COUNTER_BUFFER), //
@@ -30,7 +30,7 @@ public abstract class GlBufferFactory {
 		PIXEL_UNPACK_BUFFER(GL4.GL_PIXEL_UNPACK_BUFFER);
 		protected int glValue;
 
-		TYPE(int value) {
+		GL_TYPE(int value) {
 			this.glValue = value;
 
 		}
@@ -66,7 +66,7 @@ public abstract class GlBufferFactory {
 	 * under OpenGL/ES.
 	 */
 
-	public enum USAGE {
+	public enum GL_USAGE {
 
 		STREAM_DRAW(GL4.GL_STREAM_DRAW), //
 		STREAM_READ(GL4.GL_STREAM_READ), //
@@ -80,7 +80,7 @@ public abstract class GlBufferFactory {
 
 		protected int glValue;
 
-		USAGE(int value) {
+		GL_USAGE(int value) {
 			this.glValue = value;
 
 		}
@@ -97,7 +97,7 @@ public abstract class GlBufferFactory {
 	 * writing.
 	 */
 
-	public enum ACCESS {
+	public enum GL_ACCESS {
 
 		READ_ONLY(GL4.GL_READ_ONLY, GL4.GL_MAP_READ_BIT), //
 		WRITE_ONLY(GL4.GL_WRITE_ONLY, GL4.GL_MAP_WRITE_BIT), //
@@ -106,7 +106,7 @@ public abstract class GlBufferFactory {
 		protected int glValue;
 		protected int glMapValue;
 
-		ACCESS(int value, int mapvalue) {
+		GL_ACCESS(int value, int mapvalue) {
 			this.glValue = value;
 			this.glMapValue = mapvalue;
 		}
@@ -120,14 +120,14 @@ public abstract class GlBufferFactory {
 		}
 	};
 
-	public static GlBuffer newGLBuffer(final GL4 gl, TYPE type, USAGE usage) {
+	public static GlBuffer newGLBuffer(final GL4 gl, GL_TYPE type, GL_USAGE usage) {
 		GlBuffer gpubuffer = new GlBuffer(type, usage);
 		gpubuffer.create(gl);
 		return gpubuffer;
 	}
 
 	public static GlBuffer hostoGpuData(ByteBuffer bbdataA, GL4 gl) {
-		GlBuffer gpuhisto = GlBufferFactory.newGLBuffer(gl, TYPE.ARRAY_BUFFER, USAGE.STATIC_DRAW);
+		GlBuffer gpuhisto = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
 		gpuhisto.bind(gl);
 		gpuhisto.allocate(gl, bbdataA, bbdataA.capacity());
 		gpuhisto.release(gl);

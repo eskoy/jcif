@@ -8,8 +8,8 @@ import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
 import com.jcif.opengl.GlShaderProgram;
 import com.jcif.opengl.GlUtil;
-import com.jcif.opengl.GlBufferFactory.TYPE;
-import com.jcif.opengl.GlBufferFactory.USAGE;
+import com.jcif.opengl.GlBufferFactory.GL_TYPE;
+import com.jcif.opengl.GlBufferFactory.GL_USAGE;
 import com.jogamp.opengl.GL4;
 
 public class GridPainter implements GLPainter<Grid> {
@@ -51,7 +51,7 @@ public class GridPainter implements GLPainter<Grid> {
 
 	@Override
 	public void paint(GL4 gl, Grid object, int... viewport) {
-		GlBuffer gpuGrid = GlBufferFactory.newGLBuffer(gl, TYPE.ARRAY_BUFFER, USAGE.STATIC_DRAW);
+		GlBuffer gpuGrid = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
 		gpuGrid.bind(gl);
 		ByteBuffer grid = createUniformGrid(object.getStep());
 

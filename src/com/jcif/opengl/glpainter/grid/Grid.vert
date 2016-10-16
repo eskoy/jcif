@@ -1,6 +1,3 @@
-#version 430 core
-
-
 in vec2  attribute_Position; 
 
 uniform vec4 color;

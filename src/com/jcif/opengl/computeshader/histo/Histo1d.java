@@ -4,8 +4,8 @@ import com.jcif.opengl.GLComputeProgram;
 import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
 import com.jcif.opengl.GlUtil;
-import com.jcif.opengl.GlBufferFactory.TYPE;
-import com.jcif.opengl.GlBufferFactory.USAGE;
+import com.jcif.opengl.GlBufferFactory.GL_TYPE;
+import com.jcif.opengl.GlBufferFactory.GL_USAGE;
 import com.jogamp.opengl.GL4;
 
 public class Histo1d {
@@ -56,7 +56,7 @@ public class Histo1d {
 	public GlBuffer histogram1D(GL4 gl, GlBuffer gpuSrc_indices, int pulseCount, GlBuffer gpuSrc_values, float minValue,
 			float maxValue, int binCount) {
 
-		GlBuffer gpuDst_counts = GlBufferFactory.newGLBuffer(gl, TYPE.ATOMIC_COUNTER_BUFFER, USAGE.DYNAMIC_DRAW);
+		GlBuffer gpuDst_counts = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ATOMIC_COUNTER_BUFFER, GL_USAGE.DYNAMIC_DRAW);
 		gpuDst_counts.bind(gl);
 		gpuDst_counts.allocate(gl, binCount * Integer.BYTES);
 		gpuDst_counts.release(gl);

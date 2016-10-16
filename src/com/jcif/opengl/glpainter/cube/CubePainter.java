@@ -7,8 +7,8 @@ import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
 import com.jcif.opengl.GlShaderProgram;
 import com.jcif.opengl.GlUtil;
-import com.jcif.opengl.GlBufferFactory.TYPE;
-import com.jcif.opengl.GlBufferFactory.USAGE;
+import com.jcif.opengl.GlBufferFactory.GL_TYPE;
+import com.jcif.opengl.GlBufferFactory.GL_USAGE;
 import com.jogamp.opengl.GL4;
 
 public class CubePainter implements GLPainter<Cube> {
@@ -199,7 +199,7 @@ public class CubePainter implements GLPainter<Cube> {
 	public void paint(GL4 gl, Cube object, int... viewport) {
 		setCamera(5f, 5f, 2, 0.5f, 0.5f, -1, this.viewMatrix);
 
-		GlBuffer gpuCube = GlBufferFactory.newGLBuffer(gl, TYPE.ARRAY_BUFFER, USAGE.STATIC_DRAW);
+		GlBuffer gpuCube = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
 		gpuCube.bind(gl);
 		ByteBuffer grid = createCube();
 		gpuCube.allocate(gl, grid, grid.capacity());

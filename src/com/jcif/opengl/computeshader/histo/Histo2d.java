@@ -4,8 +4,8 @@ import com.jcif.opengl.GLComputeProgram;
 import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
 import com.jcif.opengl.GlUtil;
-import com.jcif.opengl.GlBufferFactory.TYPE;
-import com.jcif.opengl.GlBufferFactory.USAGE;
+import com.jcif.opengl.GlBufferFactory.GL_TYPE;
+import com.jcif.opengl.GlBufferFactory.GL_USAGE;
 import com.jogamp.opengl.GL4;
 
 public class Histo2d {
@@ -67,7 +67,7 @@ public class Histo2d {
 			float minValueA, float maxValueA, int binCountA, GlBuffer gpuSrc_valuesB, float minValueB, float maxValueB,
 			int binCountB) {
 
-		GlBuffer gpuDst_counts = GlBufferFactory.newGLBuffer(gl, TYPE.ATOMIC_COUNTER_BUFFER, USAGE.DYNAMIC_DRAW);
+		GlBuffer gpuDst_counts = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ATOMIC_COUNTER_BUFFER, GL_USAGE.DYNAMIC_DRAW);
 		gpuDst_counts.bind(gl);
 		gpuDst_counts.allocate(gl, binCountA * binCountB * Integer.BYTES);
 		gpuDst_counts.release(gl);

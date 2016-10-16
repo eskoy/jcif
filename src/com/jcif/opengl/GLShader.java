@@ -4,15 +4,23 @@ import com.jogamp.opengl.GL4;
 
 public class GLShader {
 
+	public static String GL_SHADER_VERSION = "#version 430 core";
+	public static String NEW_LINE = "\n";
+
 	protected int id;
 
 	public int getId() {
 		return id;
 	}
 
-	public GLShader(int type, String shaderString, GL4 gl) {
+	public GLShader(int type, GL4 gl, String... shaderString) {
 
-		createAndCompileShader(type, shaderString, gl);
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(GL_SHADER_VERSION);
+		buffer.append(NEW_LINE);
+		for (String res : shaderString)
+			buffer.append(res);
+		createAndCompileShader(type, buffer.toString(), gl);
 	}
 
 	protected void createAndCompileShader(int type, String shaderString, GL4 gl) {
