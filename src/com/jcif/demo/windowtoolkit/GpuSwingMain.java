@@ -16,20 +16,20 @@ public class GpuSwingMain {
 
 		GLJPanel gljpanel = new GLJPanel();
 
-		GpuCubeRender fastGpuRender = new GpuCubeRender();
+		GpuCubeRender gpuCubeRender = new GpuCubeRender();
 
 		gljpanel.addGLEventListener(new GLEventListener() {
 
 			@Override
 			public void reshape(GLAutoDrawable glautodrawable, int x, int y, int width, int height) {
 
-				fastGpuRender.render(glautodrawable.getGL().getGL4(), x, y, width, height);
+				gpuCubeRender.render(glautodrawable.getGL().getGL4(), x, y, width, height);
 			}
 
 			@Override
 			public void init(GLAutoDrawable glautodrawable) {
 
-				fastGpuRender.init(glautodrawable.getGL().getGL4());
+				gpuCubeRender.init(glautodrawable.getGL().getGL4());
 			}
 
 			@Override

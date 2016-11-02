@@ -17,6 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker.StateValue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jcif.demo.application.Histo2dComputeHandler;
 import com.jcif.demo.windowtoolkit.swing.model.BusinessModel;
 import com.jcif.opengl.GlSharedContextInstance;
@@ -33,6 +36,8 @@ import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLProfile;
 
 public class Histo2dController {
+
+	private final static Logger logger = LoggerFactory.getLogger(Histo2dController.class);
 
 	protected GLSwingCanvas gLSwingCanvas;
 
@@ -151,7 +156,7 @@ public class Histo2dController {
 		this.updateGrid(8, Color.CYAN);
 
 		GLContext sharedContext = GlSharedContextInstance.getInstance().getGLSharedContext();
-		System.err.println(GlSharedContextInstance.getInstance().getGLDeviceProperties());
+		logger.info("" + GlSharedContextInstance.getInstance().getGLDeviceProperties());
 
 		sharedContext.makeCurrent();
 		businessModel = new BusinessModel(6000000, sharedContext.getGL().getGL4());

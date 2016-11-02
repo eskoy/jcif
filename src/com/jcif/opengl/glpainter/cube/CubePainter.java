@@ -19,20 +19,20 @@ public class CubePainter implements GLPainter<Cube> {
 
 	protected Cube cube = new Cube();
 
-	protected GlShaderProgram gridProgram;
+	protected GlShaderProgram cubeProgram;
 
 	private int projMatrixLoc;
 
 	private int viewMatrixLoc;
 
-	public CubePainter(GL4 gl) {
+	public CubePainter() {
 
 		this.projMatrix = buildProjectionMatrix(53.13f, 0.75f, 1.0f, 30.0f, this.projMatrix);
 	}
 
 	@Override
 	public void init(GL4 gl) {
-		gridProgram = new GlShaderProgram(gl, GlUtil.loadAsText(getClass(), "Cube.vert"),
+		cubeProgram = new GlShaderProgram(gl, GlUtil.loadAsText(getClass(), "Cube.vert"),
 				GlUtil.loadAsText(getClass(), "Cube.frag"));
 
 	}
@@ -217,7 +217,7 @@ public class CubePainter implements GLPainter<Cube> {
 		gpuCube.allocate(gl, grid, grid.capacity());
 		gpuCube.release(gl);
 
-		gridProgram.beginUse(gl);
+		cubeProgram.beginUse(gl);
 
 		// Get a handle for our "MVP" uniform
 		// Only during the initialisation
@@ -228,8 +228,8 @@ public class CubePainter implements GLPainter<Cube> {
 		// MVP matrix (At least for the M part)
 		// glUniformMatrix4fv(mvp_handle, 1, GL_FALSE, &mvp[0][0]);
 
-		this.projMatrixLoc = gl.glGetUniformLocation(gridProgram.getId(), "projMatrix");
-		this.viewMatrixLoc = gl.glGetUniformLocation(gridProgram.getId(), "viewMatrix");
+		this.projMatrixLoc = gl.glGetUniformLocation(cubeProgram.getId(), "projMatrix");
+		this.viewMatrixLoc = gl.glGetUniformLocation(cubeProgram.getId(), "viewMatrix");
 
 		// set the view and the projection matrix
 		gl.glUniformMatrix4fv(this.projMatrixLoc, 1, false, this.projMatrix, 0);
@@ -244,13 +244,13 @@ public class CubePainter implements GLPainter<Cube> {
 		gl.glVertexAttribPointer(0 /* the vertex attrib ute */, 3, GL4.GL_FLOAT, false /* normalized? */,
 				0 /* stride */, 0 /* The bound VBO data offset */);
 
-		gridProgram.setUniform(gl, "color", GlUtil.colorAsVec4(this.cube.getColor()));
+		cubeProgram.setUniform(gl, "color", GlUtil.colorAsVec4(this.cube.getColor()));
 
 		gl.glDrawArrays(GL4.GL_TRIANGLES, 0, 12 * 3);
 
 		gl.glDisableVertexAttribArray(0);
 
-		gridProgram.endUse(gl);
+		cubeProgram.endUse(gl);
 
 	}
 }

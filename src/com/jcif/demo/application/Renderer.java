@@ -89,7 +89,9 @@ public class Renderer implements GLEventListener {
 		logger.info("Chosen GLCapabilities: " + drawable.getChosenGLCapabilities());
 
 		GLDeviceProperties device = new GLDeviceProperties(gl);
-		System.err.println(device);
+
+		logger.info("" + device);
+
 		size = 10000;
 		gridPainter = new GridPainter();
 		gridPainter.init(gl);
@@ -102,15 +104,10 @@ public class Renderer implements GLEventListener {
 
 	}
 
-	private long lastDelta = System.nanoTime();
-	private float delta = 0f;
-
 	@Override
 	public void display(GLAutoDrawable drawable) {
 
 		GL4 gl = drawable.getGL().getGL4();
-
-		grid.setColor(Color.CYAN);
 
 		if (keyboard.isReleased(KeyEvent.VK_SPACE)) {
 
@@ -124,7 +121,15 @@ public class Renderer implements GLEventListener {
 			IntBuffer histodata = histo2dComputeHandler.compute(gl, gpuValueA, gpuValueB, gpuValueindices, size, 0,
 					rand.nextFloat(), histosize);
 			bbHisto = histo2dComputeHandler.createPointWithHisto(histodata, histosize);
+			ScatterChart chart = new ScatterChart();
+			chart.setXYs(bbHisto[0]);
+			chart.setColors(bbHisto[1]);
+			chart.setCount(histosize * histosize);
+			scatterChartPainter.update(chart);
+
 			grid.setStep(rand.nextInt(8));
+			grid.setColor(Color.GREEN);
+			gridPainter.update(grid);
 
 		}
 
@@ -137,17 +142,8 @@ public class Renderer implements GLEventListener {
 		gl.glClearColor(0.1f, 0.0f, 0.1f, 1f);
 		gl.glClear(GL2ES2.GL_COLOR_BUFFER_BIT);
 
-		gridPainter.update(grid);
-		gridPainter.paint(gl, width, height);
-
-		if (bbHisto != null) {
-			ScatterChart chart = new ScatterChart();
-			chart.setXYs(bbHisto[0]);
-			chart.setColors(bbHisto[1]);
-			chart.setCount(histosize * histosize);
-			scatterChartPainter.update(chart);
-			scatterChartPainter.paint(gl, width, height);
-		}
+		gridPainter.paint(gl);
+		scatterChartPainter.paint(gl);
 
 	}
 

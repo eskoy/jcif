@@ -9,13 +9,13 @@ import com.jogamp.opengl.GL4;
 
 public class GpuRender {
 
-	public GridPainter gridPainter;
+	public GridPainter gridPainter = new GridPainter();
 
 	public Grid grid = new Grid();
 
 	public void init(GL4 gl) {
 
-		this.gridPainter = new GridPainter();
+		this.gridPainter.init(gl);
 	}
 
 	public GpuRender() {
@@ -39,7 +39,7 @@ public class GpuRender {
 		grid.setColor(Color.PINK);
 
 		gridPainter.update(grid);
-		gridPainter.paint(gl, width, height);
+		gridPainter.paint(gl);
 
 	}
 

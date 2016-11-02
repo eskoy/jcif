@@ -24,16 +24,18 @@ public class BackGroundPainter implements GLPainter<BackGround> {
 
 	@Override
 	public void paint(GL4 gl, int... newviewport) {
-		if (newviewport.length == 4)
-			viewPort = newviewport;
-		gl.glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 
 		gl.glEnable(GL.GL_BLEND);
 		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_DST_ALPHA);
 
+		if (newviewport.length == 4)
+			viewPort = newviewport;
+		gl.glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
+
 		// Clear screen
 		gl.glClearColor(0.1f, 0.0f, 0.1f, 1f);
 		gl.glClear(GL2ES2.GL_COLOR_BUFFER_BIT);
+
 	}
 
 }

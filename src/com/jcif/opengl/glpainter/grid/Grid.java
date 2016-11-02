@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class Grid {
 
-	protected Color color;
+	protected Color color = Color.MAGENTA;
 
 	public Color getColor() {
 		return color;

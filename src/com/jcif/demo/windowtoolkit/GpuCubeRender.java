@@ -9,12 +9,12 @@ import com.jogamp.opengl.GL4;
 
 public class GpuCubeRender {
 
-	public CubePainter painter;
+	public CubePainter painter = new CubePainter();
 	public Cube cube = new Cube();
 
 	public void init(GL4 gl) {
 
-		this.painter = new CubePainter(gl);
+		this.painter.init(gl);
 	}
 
 	public GpuCubeRender() {
@@ -43,7 +43,7 @@ public class GpuCubeRender {
 
 		cube.setColor(Color.green);
 		painter.update(cube);
-		painter.paint(gl, width, height);
+		painter.paint(gl);
 
 	}
 

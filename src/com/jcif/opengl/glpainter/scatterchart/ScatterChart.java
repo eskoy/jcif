@@ -6,7 +6,7 @@ public class ScatterChart {
 
 	protected ByteBuffer XYs;
 	protected ByteBuffer Colors;
-	protected int count;
+	protected int count = 0;
 
 	public ByteBuffer getXYs() {
 		return XYs;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.jcif.opengl.GLPainter;
 import com.jcif.opengl.glpainter.backgroung.BackGroundPainter;
+import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
@@ -42,9 +43,9 @@ public class GLSwingCanvas extends GLCanvas {
 			@Override
 			public void reshape(GLAutoDrawable glautodrawable, int x, int y, int width, int height) {
 				glautodrawable.getContext().makeCurrent();
-
+				GL4 gl = glautodrawable.getGL().getGL4();
 				for (GLPainter<?> painter : painterList) {
-					painter.paint(glautodrawable.getGL().getGL4(), x, y, width, height);
+					painter.paint(gl, x, y, width, height);
 
 				}
 
@@ -55,8 +56,9 @@ public class GLSwingCanvas extends GLCanvas {
 			@Override
 			public void init(GLAutoDrawable glautodrawable) {
 				glautodrawable.getContext().makeCurrent();
+				GL4 gl = glautodrawable.getGL().getGL4();
 				for (GLPainter<?> painter : painterList) {
-					painter.init(glautodrawable.getGL().getGL4());
+					painter.init(gl);
 				}
 				glautodrawable.getContext().release();
 				;
@@ -69,8 +71,9 @@ public class GLSwingCanvas extends GLCanvas {
 			@Override
 			public void display(GLAutoDrawable glautodrawable) {
 				glautodrawable.getContext().makeCurrent();
+				GL4 gl = glautodrawable.getGL().getGL4();
 				for (GLPainter<?> painter : painterList) {
-					painter.paint(glautodrawable.getGL().getGL4());
+					painter.paint(gl);
 				}
 
 				glautodrawable.getContext().release();

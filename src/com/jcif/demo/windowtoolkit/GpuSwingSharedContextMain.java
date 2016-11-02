@@ -19,7 +19,7 @@ public class GpuSwingSharedContextMain {
 		GLContext sharedContext = GlSharedContextInstance.getInstance().getGLSharedContext();
 		System.err.println(GlSharedContextInstance.getInstance().getGLDeviceProperties());
 
-		GpuRender fastGpuRender = new GpuRender();
+		GpuRender gpuRender = new GpuRender();
 
 		GLJPanel gljpanel = new GLJPanel(null);
 		gljpanel.setSharedContext(sharedContext);
@@ -29,13 +29,13 @@ public class GpuSwingSharedContextMain {
 			@Override
 			public void reshape(GLAutoDrawable glautodrawable, int x, int y, int width, int height) {
 
-				fastGpuRender.render(glautodrawable.getGL().getGL4(), x, y, width, height);
+				gpuRender.render(glautodrawable.getGL().getGL4(), x, y, width, height);
 			}
 
 			@Override
 			public void init(GLAutoDrawable glautodrawable) {
 
-				fastGpuRender.init(glautodrawable.getGL().getGL4());
+				gpuRender.init(glautodrawable.getGL().getGL4());
 			}
 
 			@Override
@@ -48,7 +48,7 @@ public class GpuSwingSharedContextMain {
 			}
 		});
 
-		final JFrame jframe = new JFrame("One Triangle Swing GLJPanel");
+		final JFrame jframe = new JFrame(" GpuSwingSharedContextMain ");
 		jframe.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent windowevent) {
