@@ -5,10 +5,10 @@ import java.nio.ByteBuffer;
 import com.jcif.opengl.GLPainter;
 import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
-import com.jcif.opengl.GlShaderProgram;
-import com.jcif.opengl.GlUtil;
 import com.jcif.opengl.GlBufferFactory.GL_TYPE;
 import com.jcif.opengl.GlBufferFactory.GL_USAGE;
+import com.jcif.opengl.GlShaderProgram;
+import com.jcif.opengl.GlUtil;
 import com.jogamp.opengl.GL4;
 
 public class CubePainter implements GLPainter<Cube> {
@@ -16,6 +16,8 @@ public class CubePainter implements GLPainter<Cube> {
 	// storage for Matrices
 	float projMatrix[] = new float[16];
 	float viewMatrix[] = new float[16];
+
+	protected Cube cube = new Cube();
 
 	protected GlShaderProgram gridProgram;
 
@@ -25,10 +27,14 @@ public class CubePainter implements GLPainter<Cube> {
 
 	public CubePainter(GL4 gl) {
 
+		this.projMatrix = buildProjectionMatrix(53.13f, 0.75f, 1.0f, 30.0f, this.projMatrix);
+	}
+
+	@Override
+	public void init(GL4 gl) {
 		gridProgram = new GlShaderProgram(gl, GlUtil.loadAsText(getClass(), "Cube.vert"),
 				GlUtil.loadAsText(getClass(), "Cube.frag"));
 
-		this.projMatrix = buildProjectionMatrix(53.13f, 0.75f, 1.0f, 30.0f, this.projMatrix);
 	}
 
 	// sets the square matrix mat to the identity matrix,
@@ -196,7 +202,13 @@ public class CubePainter implements GLPainter<Cube> {
 	}
 
 	@Override
-	public void paint(GL4 gl, Cube object, int... viewport) {
+	public void update(Cube t) {
+		cube = t;
+
+	}
+
+	@Override
+	public void paint(GL4 gl, int... viewport) {
 		setCamera(5f, 5f, 2, 0.5f, 0.5f, -1, this.viewMatrix);
 
 		GlBuffer gpuCube = GlBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
@@ -232,7 +244,7 @@ public class CubePainter implements GLPainter<Cube> {
 		gl.glVertexAttribPointer(0 /* the vertex attrib ute */, 3, GL4.GL_FLOAT, false /* normalized? */,
 				0 /* stride */, 0 /* The bound VBO data offset */);
 
-		gridProgram.setUniform(gl, "color", GlUtil.colorAsVec4(object.getColor()));
+		gridProgram.setUniform(gl, "color", GlUtil.colorAsVec4(this.cube.getColor()));
 
 		gl.glDrawArrays(GL4.GL_TRIANGLES, 0, 12 * 3);
 

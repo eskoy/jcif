@@ -1,11 +1,11 @@
-package com.jcif.opengl.computeshader.histo;
+package com.jcif.opengl.glcompute.histo;
 
 import com.jcif.opengl.GLComputeProgram;
 import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
-import com.jcif.opengl.GlUtil;
 import com.jcif.opengl.GlBufferFactory.GL_TYPE;
 import com.jcif.opengl.GlBufferFactory.GL_USAGE;
+import com.jcif.opengl.GlUtil;
 import com.jogamp.opengl.GL4;
 
 public class Histo2d {
@@ -24,7 +24,7 @@ public class Histo2d {
 
 	protected void initShaders(final GL4 gl) {
 
-		String prog = GlUtil.loadAsText(getClass(), "Histo2d.cs");
+		String prog = GlUtil.loadAsText(getClass(), "Histo2d.comp");
 
 		this.program = new GLComputeProgram(gl, prog);
 

@@ -91,8 +91,10 @@ public class Renderer implements GLEventListener {
 		GLDeviceProperties device = new GLDeviceProperties(gl);
 		System.err.println(device);
 		size = 10000;
-		gridPainter = new GridPainter(gl);
-		scatterChartPainter = new ScatterChartPainter(gl);
+		gridPainter = new GridPainter();
+		gridPainter.init(gl);
+		scatterChartPainter = new ScatterChartPainter();
+		scatterChartPainter.init(gl);
 		histo2dComputeHandler = new Histo2dComputeHandler(gl);
 		gpuValueA = GlBufferFactory.hostoGpuData(histo2dComputeHandler.createNewData(size), gl);
 		gpuValueB = GlBufferFactory.hostoGpuData(histo2dComputeHandler.createNewData(size), gl);
@@ -135,15 +137,16 @@ public class Renderer implements GLEventListener {
 		gl.glClearColor(0.1f, 0.0f, 0.1f, 1f);
 		gl.glClear(GL2ES2.GL_COLOR_BUFFER_BIT);
 
-		gridPainter.paint(gl, grid, width, height);
+		gridPainter.update(grid);
+		gridPainter.paint(gl, width, height);
 
 		if (bbHisto != null) {
 			ScatterChart chart = new ScatterChart();
 			chart.setXYs(bbHisto[0]);
 			chart.setColors(bbHisto[1]);
 			chart.setCount(histosize * histosize);
-
-			scatterChartPainter.paint(gl, chart, width, height);
+			scatterChartPainter.update(chart);
+			scatterChartPainter.paint(gl, width, height);
 		}
 
 	}

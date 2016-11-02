@@ -42,7 +42,8 @@ public class GpuCubeRender {
 		painter.resize(x, y, width, height);
 
 		cube.setColor(Color.green);
-		painter.paint(gl, cube, width, height);
+		painter.update(cube);
+		painter.paint(gl, width, height);
 
 	}
 

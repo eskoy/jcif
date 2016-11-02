@@ -11,7 +11,7 @@ import com.jcif.opengl.GlSharedContextInstance;
 import com.jcif.opengl.GlBufferFactory.GL_ACCESS;
 import com.jcif.opengl.GlBufferFactory.GL_TYPE;
 import com.jcif.opengl.GlBufferFactory.GL_USAGE;
-import com.jcif.opengl.computeshader.histo.Histo1d;
+import com.jcif.opengl.glcompute.histo.Histo1d;
 import com.jogamp.nativewindow.AbstractGraphicsDevice;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
@@ -122,7 +122,7 @@ public class Histo1dDemo {
 
 	public static int[] calcHistogram(FloatBuffer data, IntBuffer index, float min, float max, int numBins) {
 		final int[] result = new int[numBins];
-		final double binSize = (max - min) / numBins;
+		final float binSize = (max - min) / numBins;
 
 		for (int i = 0; i < data.capacity(); i++) {
 			if (index.get(i) != 0) {

@@ -11,7 +11,7 @@ import com.jcif.opengl.GlSharedContextInstance;
 import com.jcif.opengl.GlBufferFactory.GL_ACCESS;
 import com.jcif.opengl.GlBufferFactory.GL_TYPE;
 import com.jcif.opengl.GlBufferFactory.GL_USAGE;
-import com.jcif.opengl.computeshader.histo.Histo2d;
+import com.jcif.opengl.glcompute.histo.Histo2d;
 import com.jogamp.nativewindow.AbstractGraphicsDevice;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
