@@ -22,31 +22,32 @@ public class Histo2dComputeHandler {
 	}
 
 	public IntBuffer compute(GL4 gl, GlBuffer gpuSrc_valuesA, GlBuffer gpuSrc_valuesB, GlBuffer gpuSrc_indices,
-			int size, float min, float max, int nbins) {
-		GlBuffer histo = compute.histogram2D(gl, gpuSrc_indices, size, gpuSrc_valuesA, min, max, nbins, gpuSrc_valuesB,
-				min, max, nbins);
+			int size, float min, float max, int nabins, int nbbins) {
+		GlBuffer histo = compute.histogram2D(gl, gpuSrc_indices, size, gpuSrc_valuesA, min, max, nabins, gpuSrc_valuesB,
+				min, max, nbbins);
 		histo.bind(gl);
-		IntBuffer histoData = (histo.mapRange(gl, GL_ACCESS.READ_ONLY, 0, nbins * nbins * Integer.BYTES)).asIntBuffer();
+		IntBuffer histoData = (histo.mapRange(gl, GL_ACCESS.READ_ONLY, 0, nabins * nbbins * Integer.BYTES))
+				.asIntBuffer();
 		return histoData;
 	}
 
-	public ByteBuffer[] createPointWithHisto(IntBuffer histo, int nbins) {
-		ByteBuffer bb = GlBufferFactory.allocate(nbins * nbins * Float.BYTES * 2);
+	public ByteBuffer[] createPointWithHisto(IntBuffer histo, int nabins, int nbbins) {
+		ByteBuffer bb = GlBufferFactory.allocate(nabins * nbbins * Float.BYTES * 2);
 		FloatBuffer floatbuffervalues = bb.asFloatBuffer();
-		ByteBuffer bbColor = GlBufferFactory.allocate(nbins * nbins * Float.BYTES * 4);
+		ByteBuffer bbColor = GlBufferFactory.allocate(nabins * nbbins * Float.BYTES * 4);
 		FloatBuffer floatColorbuffervalues = bbColor.asFloatBuffer();
 
 		Random random = new Random();
 
-		float factor = nbins - 1;
+		float factor = nabins - 1;
 
-		for (int i = 0; i < nbins; i++) {
-			for (int j = 0; j < nbins; j++) {
-				int index = i * nbins + j;
+		for (int i = 0; i < nabins; i++) {
+			for (int j = 0; j < nbbins; j++) {
+				int index = i * nabins + j;
 				if (histo.get(index) != 0) {
 
-					int offset = (i * nbins + j) * 4;
-					int offset2 = (i * nbins + j) * 2;
+					int offset = (i * nabins + j) * 4;
+					int offset2 = (i * nabins + j) * 2;
 					float x = ((i) / factor * 2f) - 1f;
 					float y = ((j) / factor * 2f) - 1f;
 

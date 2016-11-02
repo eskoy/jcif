@@ -10,11 +10,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.SwingWorker.StateValue;
 
 import org.slf4j.Logger;
@@ -57,7 +59,7 @@ public class Histo2dController {
 
 	protected Histo2dComputeHandler histo2dComputeHandler;
 
-	protected int histoSize = 250;
+	protected int histoSize = 100;
 
 	public JPanel getView() {
 		return view;
@@ -94,9 +96,9 @@ public class Histo2dController {
 
 		IntBuffer histodata = histo2dComputeHandler.compute(sharedContext.getGL().getGL4(),
 				businessModel.getGpuValueA(), businessModel.getGpuValueB(), businessModel.getGpuValueindices(),
-				businessModel.getDataNumber(), 0, 1.0f, histoSize);
+				businessModel.getDataNumber(), 0, 1.0f, histoSize, histoSize);
 
-		ByteBuffer[] data = histo2dComputeHandler.createPointWithHisto(histodata, histoSize);
+		ByteBuffer[] data = histo2dComputeHandler.createPointWithHisto(histodata, histoSize, histoSize);
 
 		sharedContext.release();
 
@@ -106,48 +108,40 @@ public class Histo2dController {
 	public void update() {
 
 		final long time = System.currentTimeMillis();
-		// if (updatestateValue == null || updatestateValue == StateValue.DONE)
-		// {
-		// SwingWorker<ByteBuffer[], Void> worker = new
-		// SwingWorker<ByteBuffer[], Void>() {
-		// @Override
-		// public ByteBuffer[] doInBackground() {
-		//
-		// return updateViewModel();
-		// }
-		//
-		// @Override
-		// public void done() {
-		//
-		// try {
-		// updateChart(get(), histoSize);
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (ExecutionException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// Random rand = new Random();
-		// long newtime = System.currentTimeMillis() - time;
-		// System.err.println(
-		// "Time to compute & diplay histo is in ms " + newtime + " " +
-		// Thread.currentThread());
-		// updateGrid(rand.nextInt(20), Color.CYAN);
-		// gLSwingCanvas.repaint();
-		// updatestateValue = this.getState();
-		//
-		// }
-		// };
-		//
-		// worker.execute();
-		//
-		// }
+		if (updatestateValue == null || updatestateValue == StateValue.DONE) {
+			SwingWorker<ByteBuffer[], Void> worker = new SwingWorker<ByteBuffer[], Void>() {
+				@Override
+				public ByteBuffer[] doInBackground() {
 
-		updateChart(updateViewModel(), 40);
-		Random rand = new Random();
-		updateGrid(rand.nextInt(20), Color.CYAN);
-		gLSwingCanvas.repaint();
+					return updateViewModel();
+				}
+
+				@Override
+				public void done() {
+
+					try {
+						updateChart(get(), histoSize);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Random rand = new Random();
+					long newtime = System.currentTimeMillis() - time;
+					System.err.println(
+							"Time to compute & diplay histo is in ms " + newtime + " " + Thread.currentThread());
+					updateGrid(rand.nextInt(20), Color.CYAN);
+					gLSwingCanvas.repaint();
+					updatestateValue = this.getState();
+
+				}
+			};
+
+			worker.execute();
+
+		}
 
 	}
 
@@ -203,7 +197,8 @@ public class Histo2dController {
 
 		scatterChart.setXYs(data[0]);
 		scatterChart.setColors(data[1]);
-		scatterChart.setCount(count);
+		// simplification works with square histo
+		scatterChart.setCount(count * count);
 		scatterChartPainter.update(scatterChart);
 
 	}
@@ -217,7 +212,7 @@ public class Histo2dController {
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(() -> {
-			final JFrame jframe = new JFrame("HistoController demo");
+			final JFrame jframe = new JFrame("Histo compute shader press space bar !!!!!!");
 			jframe.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosing(WindowEvent windowevent) {

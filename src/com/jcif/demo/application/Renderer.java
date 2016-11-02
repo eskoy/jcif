@@ -119,8 +119,8 @@ public class Renderer implements GLEventListener {
 			Random rand = new Random();
 
 			IntBuffer histodata = histo2dComputeHandler.compute(gl, gpuValueA, gpuValueB, gpuValueindices, size, 0,
-					rand.nextFloat(), histosize);
-			bbHisto = histo2dComputeHandler.createPointWithHisto(histodata, histosize);
+					rand.nextFloat(), histosize, histosize);
+			bbHisto = histo2dComputeHandler.createPointWithHisto(histodata, histosize, histosize);
 			ScatterChart chart = new ScatterChart();
 			chart.setXYs(bbHisto[0]);
 			chart.setColors(bbHisto[1]);

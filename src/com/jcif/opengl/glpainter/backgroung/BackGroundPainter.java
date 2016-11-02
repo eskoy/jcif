@@ -7,9 +7,15 @@ import com.jogamp.opengl.GL4;
 
 public class BackGroundPainter implements GLPainter<BackGround> {
 
-	protected BackGround backGround;
+	protected BackGround backGround = new BackGround();
 
-	int[] viewPort;
+	public BackGround getBackGround() {
+		return backGround;
+	}
+
+	public void setBackGround(BackGround backGround) {
+		this.backGround = backGround;
+	}
 
 	@Override
 	public void update(BackGround t) {
@@ -28,9 +34,8 @@ public class BackGroundPainter implements GLPainter<BackGround> {
 		gl.glEnable(GL.GL_BLEND);
 		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_DST_ALPHA);
 
-		if (newviewport.length == 4)
-			viewPort = newviewport;
-		gl.glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
+		gl.glViewport(this.backGround.getViewPort()[0], this.backGround.getViewPort()[1],
+				this.backGround.getViewPort()[2], this.backGround.getViewPort()[3]);
 
 		// Clear screen
 		gl.glClearColor(0.1f, 0.0f, 0.1f, 1f);
