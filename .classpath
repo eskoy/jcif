@@ -2,13 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/jogl/2.3.2/gluegen-rt-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/jogl/2.3.2/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="lib/jogl/2.3.2/jogl-all-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/jogl/2.3.2/jogl-all-noawt.jar"/>
-	<classpathentry kind="lib" path="lib/jogl/2.3.2/jogl-all.jar"/>
-	<classpathentry kind="lib" path="lib/slfj/1.7.5/slf4j-api-1.7.5.jar"/>
-	<classpathentry kind="lib" path="lib/slfj/1.7.5/slf4j-simple-1.7.2.jar"/>
-	<classpathentry kind="lib" path="lib/swt/swt.jar"/>
+	<classpathentry kind="var" path="LOCAL_REPO/jogl/2.3.2/gluegen-rt.jar"/>
+	<classpathentry kind="var" path="LOCAL_REPO/jogl/2.3.2/jogl-all.jar"/>
+	<classpathentry kind="var" path="LOCAL_REPO/slfj/1.7.5/slf4j-api-1.7.5.jar"/>
+	<classpathentry kind="var" path="LOCAL_REPO/slfj/1.7.5/slf4j-simple-1.7.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
