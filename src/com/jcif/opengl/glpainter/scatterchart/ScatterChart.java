@@ -7,6 +7,15 @@ public class ScatterChart {
 	protected ByteBuffer XYs;
 	protected ByteBuffer Colors;
 	protected int count = 0;
+	protected float pointSize = 3f;
+
+	public float getPointSize() {
+		return pointSize;
+	}
+
+	public void setPointSize(float pointSize) {
+		this.pointSize = pointSize;
+	}
 
 	public ByteBuffer getXYs() {
 		return XYs;

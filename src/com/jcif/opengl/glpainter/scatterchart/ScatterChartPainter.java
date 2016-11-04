@@ -38,6 +38,8 @@ public class ScatterChartPainter implements GLPainter<ScatterChart> {
 			gl.glEnableVertexAttribArray(0);
 			gl.glEnableVertexAttribArray(1);
 
+			this.pointProgram.setUniform(gl, "pointSize", this.scatterChart.getPointSize());
+
 			GlBuffer gpudata = GlBufferFactory.hostoGpuData(this.scatterChart.getXYs(), gl);
 			gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, gpudata.getId());
 			// Associate Vertex attribute 0 with the last bound VBO

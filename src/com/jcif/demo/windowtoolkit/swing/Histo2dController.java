@@ -4,10 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -24,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.jcif.demo.application.Histo2dComputeHandler;
 import com.jcif.demo.windowtoolkit.swing.model.BusinessModel;
+import com.jcif.opengl.GlBufferFactory;
 import com.jcif.opengl.GlSharedContextInstance;
 import com.jcif.opengl.glpainter.grid.Grid;
 import com.jcif.opengl.glpainter.grid.GridPainter;
@@ -48,6 +52,10 @@ public class Histo2dController {
 	protected Grid grid = new Grid();
 
 	protected ScatterChartPainter scatterChartPainter = new ScatterChartPainter();
+
+	protected ScatterChartPainter mousePainter = new ScatterChartPainter();
+
+	protected ScatterChart mouseData = new ScatterChart();
 
 	protected ScatterChart scatterChart = new ScatterChart();
 
@@ -103,6 +111,30 @@ public class Histo2dController {
 		sharedContext.release();
 
 		return data;
+	}
+
+	public ByteBuffer[] createMouseData(int x, int y) {
+		ByteBuffer bb = GlBufferFactory.allocate(Float.BYTES * 2);
+		FloatBuffer floatbuffervalues = bb.asFloatBuffer();
+		ByteBuffer bbColor = GlBufferFactory.allocate(Float.BYTES * 4);
+		FloatBuffer floatColorbuffervalues = bbColor.asFloatBuffer();
+
+		Random random = new Random();
+
+		floatbuffervalues.put(0, random.nextFloat());
+		floatbuffervalues.put(1, random.nextFloat());
+
+		float r = 0.25f;
+		float g = random.nextFloat() * 0.25f;
+		float b = random.nextFloat() * 0.25f;
+
+		floatColorbuffervalues.put(0, r);
+		floatColorbuffervalues.put(1, g);
+		floatColorbuffervalues.put(2, b);
+		floatColorbuffervalues.put(3, 1f);
+
+		return new ByteBuffer[] { bb, bbColor };
+
 	}
 
 	public void update() {
@@ -161,6 +193,7 @@ public class Histo2dController {
 		gLSwingCanvas.setSharedContext(sharedContext);
 		gLSwingCanvas.addPainter(gridPainter);
 		gLSwingCanvas.addPainter(scatterChartPainter);
+		gLSwingCanvas.addPainter(mousePainter);
 
 		this.updateChart(updateViewModel(), histoSize);
 
@@ -187,6 +220,51 @@ public class Histo2dController {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
+
+			}
+		});
+
+		gLSwingCanvas.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				ByteBuffer[] data = createMouseData(e.getX(), e.getY());
+
+				mouseData.setXYs(data[0]);
+				mouseData.setColors(data[1]);
+				mouseData.setPointSize(10f);
+				// simplification works with square histo
+
+				mouseData.setCount(1);
+				mousePainter.update(mouseData);
+
+				System.err.println("mouse paint");
+				gLSwingCanvas.repaint();
 
 			}
 		});
