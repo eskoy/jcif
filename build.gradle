@@ -1,8 +1,14 @@
 apply plugin: "java"
-apply plugin: "checkstyle"
-apply plugin: "findbugs"
-apply plugin: "pmd"
 apply plugin: "application"
+apply plugin: 'eclipse'
+
+configurations {
+  provided
+  someBoringConfig
+}
+
+
+
 
 mainClassName = "com.jcif.demo.application.Main"
 			
@@ -52,4 +58,27 @@ dependencies {
     runtime "org.jogamp.jogl:jogl-all:2.3.2:natives-solaris-i586"
     runtime "org.jogamp.jogl:jogl-all:2.3.2:natives-windows-amd64"
     runtime "org.jogamp.jogl:jogl-all:2.3.2:natives-windows-i586"
+}
+
+eclipse {
+  //if you want parts of paths in resulting file to be replaced by variables (files):
+  pathVariables 'GRADLE_HOME': file('/best/software/gradle'), 'TOMCAT_HOME': file('../tomcat')
+
+  classpath {
+    //you can tweak the classpath of the Eclipse project by adding extra configurations:
+    plusConfigurations += [ configurations.provided ]
+
+    //you can also remove configurations from the classpath:
+    minusConfigurations += [ configurations.someBoringConfig ]
+
+    //if you want to append extra containers:
+    containers 'someFriendlyContainer', 'andYetAnotherContainer'
+
+    //customizing the classes output directory:
+    defaultOutputDir = file('build-eclipse')
+
+    //default settings for downloading sources and Javadoc:
+    downloadSources = true
+    downloadJavadoc = false
+  }
 }
