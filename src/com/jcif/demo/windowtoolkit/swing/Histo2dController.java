@@ -33,20 +33,23 @@ import com.jcif.opengl.glpainter.grid.Grid;
 import com.jcif.opengl.glpainter.grid.GridPainter;
 import com.jcif.opengl.glpainter.scatterchart.ScatterChart;
 import com.jcif.opengl.glpainter.scatterchart.ScatterChartPainter;
-import com.jcif.opengl.windowtoolkit.GLSwingCanvas;
+import com.jcif.opengl.windowtoolkit.GLPainterController;
+import com.jcif.opengl.windowtoolkit.WindowToolkitFactory;
 import com.jogamp.nativewindow.AbstractGraphicsDevice;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
 
 public class Histo2dController {
 
 	private final static Logger logger = LoggerFactory.getLogger(Histo2dController.class);
 
-	protected GLSwingCanvas gLSwingCanvas;
+	protected GLPainterController<GLCanvas> gLPainterController = WindowToolkitFactory.newSwingGLPainterController();
 
+	// protected GLCanvas gLCanvas = gLPainterController.getDisplayComponent();
 	protected GridPainter gridPainter = new GridPainter();
 
 	protected Grid grid = new Grid();
@@ -113,7 +116,7 @@ public class Histo2dController {
 		return data;
 	}
 
-	public ByteBuffer[] createMouseData(int x, int y) {
+	public ByteBuffer[] createMouseData(float x, float y) {
 		ByteBuffer bb = GlBufferFactory.allocate(Float.BYTES * 2);
 		FloatBuffer floatbuffervalues = bb.asFloatBuffer();
 		ByteBuffer bbColor = GlBufferFactory.allocate(Float.BYTES * 4);
@@ -121,8 +124,8 @@ public class Histo2dController {
 
 		Random random = new Random();
 
-		floatbuffervalues.put(0, random.nextFloat());
-		floatbuffervalues.put(1, random.nextFloat());
+		floatbuffervalues.put(0, x);
+		floatbuffervalues.put(1, y);
 
 		float r = 0.25f;
 		float g = random.nextFloat() * 0.25f;
@@ -165,7 +168,7 @@ public class Histo2dController {
 					System.err.println(
 							"Time to compute & diplay histo is in ms " + newtime + " " + Thread.currentThread());
 					updateGrid(rand.nextInt(20), Color.CYAN);
-					gLSwingCanvas.repaint();
+					gLPainterController.repaint();
 					updatestateValue = this.getState();
 
 				}
@@ -189,21 +192,20 @@ public class Histo2dController {
 		histo2dComputeHandler = new Histo2dComputeHandler(sharedContext.getGL().getGL4());
 		sharedContext.release();
 
-		gLSwingCanvas = new GLSwingCanvas();
-		gLSwingCanvas.setSharedContext(sharedContext);
-		gLSwingCanvas.addPainter(gridPainter);
-		gLSwingCanvas.addPainter(scatterChartPainter);
-		gLSwingCanvas.addPainter(mousePainter);
+		gLPainterController.setSharedContext(sharedContext);
+		gLPainterController.addPainter(gridPainter);
+		gLPainterController.addPainter(scatterChartPainter);
+		gLPainterController.addPainter(mousePainter);
 
 		this.updateChart(updateViewModel(), histoSize);
 
 		view = new JPanel(new BorderLayout(1, 1));
-		view.add(gLSwingCanvas, BorderLayout.CENTER);
+		view.add(gLPainterController.getDisplayComponent(), BorderLayout.CENTER);
 		view.add(new JLabel("SwingLabel"), BorderLayout.NORTH);
 
 		view.setBackground(Color.cyan);
 
-		gLSwingCanvas.addKeyListener(new KeyListener() {
+		gLPainterController.getDisplayComponent().addKeyListener(new KeyListener() {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -224,7 +226,7 @@ public class Histo2dController {
 			}
 		});
 
-		gLSwingCanvas.addMouseListener(new MouseListener() {
+		gLPainterController.getDisplayComponent().addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -253,7 +255,14 @@ public class Histo2dController {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 
-				ByteBuffer[] data = createMouseData(e.getX(), e.getY());
+				float x = e.getX();
+				x /= gLPainterController.getBackGround().getViewPort()[2];
+				float y = e.getY();
+				y /= gLPainterController.getBackGround().getViewPort()[3];
+				x = x * 2 - 1;
+				y = -(y * 2 - 1);
+
+				ByteBuffer[] data = createMouseData(x, y);
 
 				mouseData.setXYs(data[0]);
 				mouseData.setColors(data[1]);
@@ -263,8 +272,8 @@ public class Histo2dController {
 				mouseData.setCount(1);
 				mousePainter.update(mouseData);
 
-				System.err.println("mouse paint");
-				gLSwingCanvas.repaint();
+				System.err.println("mouse paint  " + x + " " + y + "    " + e.getX() + "   " + e.getY());
+				gLPainterController.getDisplayComponent().repaint();
 
 			}
 		});

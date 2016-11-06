@@ -1,47 +1,24 @@
-package com.jcif.opengl.windowtoolkit;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.jcif.opengl.windowtoolkit.impl;
 
 import com.jcif.opengl.GLPainter;
-import com.jcif.opengl.glpainter.backgroung.BackGround;
-import com.jcif.opengl.glpainter.backgroung.BackGroundPainter;
+import com.jcif.opengl.windowtoolkit.GLPainterController;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
 
-public class GLSwingCanvas extends GLCanvas {
+public class GLSwingPainterController extends GLPainterController<GLCanvas> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	protected GLCanvas gLCanvas = new GLCanvas();
 
-	BackGround backGround = new BackGround();
-	BackGroundPainter defaultBackGroundPainter = new BackGroundPainter();
-
-	protected List<GLPainter<?>> painterList = new ArrayList<GLPainter<?>>();
-
-	public void addPainter(GLPainter<?> painter) {
-		this.painterList.add(painter);
-
-	}
-
-	@Override
-	public void repaint() {
-		this.display();
-	}
-
-	public GLSwingCanvas()
-
-	{
+	public GLSwingPainterController() {
+		super();
 
 		// init with default background
 		this.addPainter(defaultBackGroundPainter);
-
 		// register gl event
-		this.addGLEventListener(new GLEventListener() {
+		gLCanvas.addGLEventListener(new GLEventListener() {
 
 			@Override
 			public void reshape(GLAutoDrawable glautodrawable, int x, int y, int width, int height) {
@@ -85,6 +62,25 @@ public class GLSwingCanvas extends GLCanvas {
 
 			}
 		});
+
+	}
+
+	@Override
+	public GLCanvas getDisplayComponent() {
+
+		return gLCanvas;
+	}
+
+	@Override
+	public void setSharedContext(GLContext glContext) {
+		gLCanvas.setSharedContext(glContext);
+
+	}
+
+	@Override
+	public void repaint() {
+		gLCanvas.display();
+
 	}
 
 }
