@@ -31,6 +31,38 @@ public class Histo2dComputeHandler {
 		return histoData;
 	}
 
+	public void filterPoint(ByteBuffer[] bb, float x, float y, float size) {
+		FloatBuffer xy = bb[0].asFloatBuffer();
+
+		FloatBuffer color = bb[1].asFloatBuffer();
+
+		float minx = x - size;
+
+		float maxx = x + size;
+
+		float miny = y - size;
+		float maxy = y + size;
+
+		int count = xy.capacity() / 2;
+
+		for (int i = 0; i < count; i++) {
+			int xyindex = 2 * i;
+			float currentx = xy.get(xyindex + 0);
+			float currenty = xy.get(xyindex + 1);
+
+			if ((minx < currentx) && (currentx < maxx) && (miny < currenty) && (currenty < maxy)) {
+				int colorindex = 4 * i;
+				color.put(colorindex + 0, 1);
+				color.put(colorindex + 1, 0);
+				color.put(colorindex + 2, 0);
+				color.put(colorindex + 3, 1f);
+
+			}
+
+		}
+
+	}
+
 	public ByteBuffer[] createPointWithHisto(IntBuffer histo, int nabins, int nbbins) {
 		ByteBuffer bb = GlBufferFactory.allocate(nabins * nbbins * Float.BYTES * 2);
 		FloatBuffer floatbuffervalues = bb.asFloatBuffer();
