@@ -30,6 +30,10 @@ repositories {
 }
 
 dependencies {
+    compile "de.grundid.opendatalab:geojson-jackson:1.6"
+    compile "com.fasterxml.jackson.core:jackson-core:2.8.5"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.8.5"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.8.5"
     compile "org.jogamp.gluegen:gluegen-rt:2.3.2"
     compile "org.jogamp.jogl:jogl-all:2.3.2"
     compile "org.eclipse:swt:3.3.0-v3346"

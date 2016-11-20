@@ -13,8 +13,8 @@ import com.jcif.opengl.GlBuffer;
 import com.jcif.opengl.GlBufferFactory;
 import com.jcif.opengl.glpainter.grid.Grid;
 import com.jcif.opengl.glpainter.grid.GridPainter;
-import com.jcif.opengl.glpainter.scatterchart.ScatterChart;
-import com.jcif.opengl.glpainter.scatterchart.ScatterChartPainter;
+import com.jcif.opengl.glpainter.point.Points;
+import com.jcif.opengl.glpainter.point.PointPainter;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL;
@@ -40,7 +40,7 @@ public class Renderer implements GLEventListener {
 	private Histo2dComputeHandler histo2dComputeHandler;
 	private GridPainter gridPainter;
 	public Grid grid = new Grid();
-	private ScatterChartPainter scatterChartPainter;
+	private PointPainter scatterChartPainter;
 	private int size;
 	private int histosize;
 
@@ -95,7 +95,7 @@ public class Renderer implements GLEventListener {
 		size = 10000;
 		gridPainter = new GridPainter();
 		gridPainter.init(gl);
-		scatterChartPainter = new ScatterChartPainter();
+		scatterChartPainter = new PointPainter();
 		scatterChartPainter.init(gl);
 		histo2dComputeHandler = new Histo2dComputeHandler(gl);
 		gpuValueA = GlBufferFactory.hostoGpuData(histo2dComputeHandler.createNewData(size), gl);
@@ -121,7 +121,7 @@ public class Renderer implements GLEventListener {
 			IntBuffer histodata = histo2dComputeHandler.compute(gl, gpuValueA, gpuValueB, gpuValueindices, size, 0,
 					rand.nextFloat(), histosize, histosize);
 			bbHisto = histo2dComputeHandler.createPointWithHisto(histodata, histosize, histosize);
-			ScatterChart chart = new ScatterChart();
+			Points chart = new Points();
 			chart.setXYs(bbHisto[0]);
 			chart.setColors(bbHisto[1]);
 			chart.setCount(histosize * histosize);
