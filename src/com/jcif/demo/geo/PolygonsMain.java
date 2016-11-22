@@ -70,7 +70,7 @@ public class PolygonsMain {
 			}
 		});
 
-		final JFrame jframe = new JFrame("One Triangle Swing GLJPanel");
+		final JFrame jframe = new JFrame("Draw geojson polygon with OpenGl polygon !!!!!  ");
 		jframe.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent windowevent) {
