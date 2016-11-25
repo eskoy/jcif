@@ -27,6 +27,9 @@ sourceSets {
 
 repositories {
     jcenter()
+     maven {
+        url "http://repository.mygrid.org.uk/artifactory/list/keep/"
+    }
 }
 
 dependencies {
@@ -36,8 +39,8 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-annotations:2.8.5"
     compile "org.jogamp.gluegen:gluegen-rt:2.3.2"
     compile "org.jogamp.jogl:jogl-all:2.3.2"
-    compile "org.eclipse:swt:3.3.0-v3346"
     compile "org.slf4j:slf4j-simple:1.7.21"
+    compile "org.nocrala:shapefilereader:1.0"
 
     runtime "org.jogamp.gluegen:gluegen-rt:2.3.2:natives-android-aarch64"
     runtime "org.jogamp.gluegen:gluegen-rt:2.3.2:natives-android-armv6"
