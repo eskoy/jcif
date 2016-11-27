@@ -12,18 +12,6 @@ configurations {
 
 mainClassName = "com.jcif.demo.application.Main"
 			
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src']
-        }
-        
-        resources {
-            srcDirs = ['src']
-        }
-    }
-}
-
 
 repositories {
     jcenter()
@@ -82,7 +70,7 @@ eclipse {
     containers 'someFriendlyContainer', 'andYetAnotherContainer'
 
     //customizing the classes output directory:
-    defaultOutputDir = file('build-eclipse')
+    defaultOutputDir = file('build')
 
     //default settings for downloading sources and Javadoc:
     downloadSources = true
