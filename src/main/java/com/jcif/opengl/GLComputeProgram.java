@@ -10,7 +10,7 @@ public class GLComputeProgram extends GLProgram {
 
 	private GLShader computeShader;
 
-	protected boolean debug = false;
+	protected boolean debug = true;
 
 	public GLComputeProgram(GL4 gl, GLSLProvider compute) {
 

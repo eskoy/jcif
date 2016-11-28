@@ -5,11 +5,6 @@ import com.jcif.opengl.GLSLProvider;
 public enum GLHISTO implements GLSLProvider {
 
 	HISTO1D(String.join(NEW_LINE, //
-			"#define GROUP_COUNT 4096", //
-			"#define GROUP_SIZE 512", //
-			"#define GRID_SIZE   (GROUP_COUNT*GROUP_SIZE)", //
-			"layout(local_size_x=GROUP_SIZE) in;", //
-			"const int globalId=int(gl_GlobalInvocationID.x);", //
 			"layout(std430, binding = 0) volatile coherent buffer SSBO_0 {    ", //
 			"int counts[];", //
 			" };", //
@@ -41,11 +36,6 @@ public enum GLHISTO implements GLSLProvider {
 			"}")),
 
 	HISTO2D(String.join(NEW_LINE, //
-			"#define GROUP_COUNT 4096", //
-			"#define GROUP_SIZE 512", //
-			"#define GRID_SIZE   (GROUP_COUNT*GROUP_SIZE)", //
-			"layout(local_size_x=GROUP_SIZE) in;", //
-			"const int globalId=int(gl_GlobalInvocationID.x);", //
 			"layout(std430, binding = 0) volatile coherent buffer SSBO_0 {    ", //
 			"int counts[];", //
 			" };", //
@@ -89,8 +79,7 @@ public enum GLHISTO implements GLSLProvider {
 
 	@Override
 	public String getGLSL() {
-
-		return shader;
+		return GLSLProvider.buildGLSL(shader);
 	}
 
 }
