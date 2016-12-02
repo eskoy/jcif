@@ -1,12 +1,12 @@
-package com.jcif.opengl.glpainter.point;
+package com.jcif.opengl.glpainter.histo;
 
 import com.jcif.opengl.GLSLProvider;
 
-public enum GLSLPOINT implements GLSLProvider {
+public enum GLSLHISTO implements GLSLProvider {
 
-	Vertex(String.join(NEW_LINE, //
-			"in vec2  attribute_Position;", //
-			"in vec4  attribute_Color;", //
+	Vertex2d(String.join(NEW_LINE, //
+			"layout (location=0) in vec2  attribute_Position;", //
+			"layout (location=1) in vec4  attribute_Color;", //
 			"uniform float pointSize;", //
 			"out vec4 varying_Color;", //
 			"void main(void) {", //
@@ -16,6 +16,20 @@ public enum GLSLPOINT implements GLSLProvider {
 			"//  gl_Position =  uniform_Projection * vec4(attribute_Position.x, attribute_Position.y, 0, 1);", //
 			"gl_Position = vec4(attribute_Position.x,attribute_Position.y, 0, 1.0);", //
 			"varying_Color = attribute_Color;", //
+			"}")) //
+
+	, Vertex3d(String.join(NEW_LINE, //
+			"layout (location=0) in vec3  attribute_Position;", //
+			"layout (location=1) in vec4  attribute_Color;", //
+			"out vec4 varying_Color;", //
+			"vec4 pos;", //
+			"uniform float pointSize;", //
+			"uniform mat4 viewMatrix, projMatrix;", //
+			"void main(void)", //
+			"{", //
+			"	gl_PointSize = pointSize;", //
+			"   varying_Color = attribute_Color;", //
+			"   gl_Position = projMatrix * viewMatrix *  vec4(attribute_Position.x,attribute_Position.y, attribute_Position.z, 1.0);", //
 			"}")) //
 
 	,
@@ -30,7 +44,7 @@ public enum GLSLPOINT implements GLSLProvider {
 
 	protected String shader;
 
-	private GLSLPOINT(String shader) {
+	private GLSLHISTO(String shader) {
 		this.shader = shader;
 	}
 

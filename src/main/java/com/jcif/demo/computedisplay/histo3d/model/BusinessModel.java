@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay.histo2d.model;
+package com.jcif.demo.computedisplay.histo3d.model;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -19,6 +19,8 @@ public class BusinessModel {
 
 	private GLBuffer gpuValueA;
 
+	private GLBuffer gpuValueC;
+
 	public int getDataNumber() {
 		return dataNumber;
 	}
@@ -29,6 +31,10 @@ public class BusinessModel {
 
 	public GLBuffer getGpuValueB() {
 		return gpuValueB;
+	}
+
+	public GLBuffer getGpuValueC() {
+		return gpuValueC;
 	}
 
 	public GLBuffer getGpuValueindices() {
@@ -43,6 +49,7 @@ public class BusinessModel {
 		dataNumber = size;
 		gpuValueA = GLBufferFactory.hostoGpuData(this.createNewData(size), gl);
 		gpuValueB = GLBufferFactory.hostoGpuData(this.createNewData(size), gl);
+		gpuValueC = GLBufferFactory.hostoGpuData(this.createNewData(size), gl);
 		gpuValueindices = GLBufferFactory.hostoGpuData(this.createIndices(size), gl);
 
 	}

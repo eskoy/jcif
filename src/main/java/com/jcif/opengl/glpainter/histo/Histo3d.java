@@ -2,9 +2,9 @@ package com.jcif.opengl.glpainter.histo;
 
 import java.nio.ByteBuffer;
 
-public class Histo2d {
+public class Histo3d {
 
-	protected ByteBuffer XYs;
+	protected ByteBuffer XYZs;
 	protected ByteBuffer Colors;
 	protected int count = 0;
 	protected float pointSize = 3f;
@@ -17,12 +17,12 @@ public class Histo2d {
 		this.pointSize = pointSize;
 	}
 
-	public ByteBuffer getXYs() {
-		return XYs;
+	public ByteBuffer getXYZs() {
+		return XYZs;
 	}
 
-	public void setXYs(ByteBuffer xYs) {
-		XYs = xYs;
+	public void setXYZs(ByteBuffer xYZs) {
+		XYZs = xYZs;
 	}
 
 	public ByteBuffer getColors() {

@@ -7,11 +7,11 @@ import com.jcif.opengl.GLBufferFactory.GL_USAGE;
 import com.jcif.opengl.GLComputeProgram;
 import com.jogamp.opengl.GL4;
 
-public class GlComputeHisto2d {
+public class GlComputeHisto3d {
 
 	protected GLComputeProgram program;
 
-	public GlComputeHisto2d(GL4 gl) {
+	public GlComputeHisto3d(GL4 gl) {
 		initialize(gl);
 	}
 
@@ -23,9 +23,7 @@ public class GlComputeHisto2d {
 
 	protected void initShaders(final GL4 gl) {
 
-		// String prog = GLUtil.loadAsText(getClass(), "Histo2d.comp");
-
-		this.program = new GLComputeProgram(gl, GLSLHISTO.HISTO2D);
+		this.program = new GLComputeProgram(gl, GLSLHISTO.HISTO3D);
 
 	}
 
@@ -42,51 +40,45 @@ public class GlComputeHisto2d {
 	 * @param gpuDst_counts
 	 *            The identifier of the destination GPU-buffer to store the
 	 *            counts of each bin.
-	 * @param gpuSrc_valuesA
+	 * @param gpuSrc_values
 	 *            The identifier of the source GPU-buffer containing the A
 	 *            values to analyse.
-	 * @param minValueA
+	 * @param minValue
 	 *            The lower bound of the range used for counting A values.
-	 * @param maxValueA
+	 * @param maxValue
 	 *            The upper bound of the range used for counting A values.
-	 * @param binCountA
+	 * @param binCount
 	 *            The number of bins of the range used for counting A values.
-	 * @param gpuSrc_valuesB
-	 *            The identifier of the source GPU-buffer containing the B
-	 *            values to analyse.
-	 * @param minValueB
-	 *            The lower bound of the range used for counting B values.
-	 * @param maxValueB
-	 *            The upper bound of the range used for counting B values.
-	 * @param binCountB
-	 *            The number of bins of the range used for counting B values.
-	 * @return Success.
 	 */
-	public GLBuffer histogram2D(GL4 gl, GLBuffer gpuSrc_indices, int pulseCount, GLBuffer gpuSrc_valuesA,
-			float minValueA, float maxValueA, int binCountA, GLBuffer gpuSrc_valuesB, float minValueB, float maxValueB,
-			int binCountB) {
+	public GLBuffer histogram3D(GL4 gl, GLBuffer gpuSrc_indices, int pulseCount, GLBuffer[] gpuSrc_values,
+			float[] minValues, float[] maxValues, int[] binCounts) {
 
 		GLBuffer gpuDst_counts = GLBufferFactory.newGLBuffer(gl, GL_TYPE.ATOMIC_COUNTER_BUFFER, GL_USAGE.DYNAMIC_DRAW);
 		gpuDst_counts.bind(gl);
-		gpuDst_counts.allocate(gl, binCountA * binCountB * Integer.BYTES);
+		gpuDst_counts.allocate(gl, binCounts[0] * binCounts[1] * binCounts[2] * Integer.BYTES);
 		gpuDst_counts.release(gl);
 
 		// binCount*(v-minValue)/(maxValue-minValue)
-		float factorA = binCountA / (maxValueA - minValueA);
-		float incrementA = -minValueA * factorA;
+		float factorA = binCounts[0] / (maxValues[0] - minValues[0]);
+		float incrementA = -minValues[0] * factorA;
 
-		float factorB = binCountB / (maxValueB - minValueB);
-		float incrementB = -minValueB * factorB;
+		float factorB = binCounts[1] / (maxValues[1] - minValues[1]);
+		float incrementB = -minValues[1] * factorB;
+
+		float factorC = binCounts[2] / (maxValues[2] - minValues[2]);
+		float incrementC = -minValues[2] * factorC;
 
 		this.program.beginUse(gl);
 
 		this.program.bindBufferBase(gl, GL4.GL_SHADER_STORAGE_BUFFER, 0, gpuDst_counts);
 		this.program.bindBufferBase(gl, GL4.GL_SHADER_STORAGE_BUFFER, 1, gpuSrc_indices);
-		this.program.bindBufferBase(gl, GL4.GL_SHADER_STORAGE_BUFFER, 2, gpuSrc_valuesA);
-		this.program.bindBufferBase(gl, GL4.GL_SHADER_STORAGE_BUFFER, 3, gpuSrc_valuesB);
+		this.program.bindBufferBase(gl, GL4.GL_SHADER_STORAGE_BUFFER, 2, gpuSrc_values[0]);
+		this.program.bindBufferBase(gl, GL4.GL_SHADER_STORAGE_BUFFER, 3, gpuSrc_values[1]);
+		this.program.bindBufferBase(gl, GL4.GL_SHADER_STORAGE_BUFFER, 4, gpuSrc_values[2]);
 
-		this.program.setUniform(gl, 0, pulseCount, binCountA, binCountB);
-		this.program.setUniform(gl, 1, factorA, factorB, incrementA, incrementB);
+		this.program.setUniform(gl, 0, pulseCount, binCounts[0], binCounts[1], binCounts[2]);
+		this.program.setUniform(gl, 1, factorA, factorB, factorC);
+		this.program.setUniform(gl, 2, incrementA, incrementB, incrementC);
 		this.program.compute(gl, 4096, 1, 1);
 		// this.program.memoryBarrier();
 		this.program.endUse(gl);

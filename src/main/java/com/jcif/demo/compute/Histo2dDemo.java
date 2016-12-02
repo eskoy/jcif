@@ -1,4 +1,4 @@
-package com.jcif.demo.computing;
+package com.jcif.demo.compute;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -11,7 +11,7 @@ import com.jcif.opengl.GLSharedContextInstance;
 import com.jcif.opengl.GLBufferFactory.GL_ACCESS;
 import com.jcif.opengl.GLBufferFactory.GL_TYPE;
 import com.jcif.opengl.GLBufferFactory.GL_USAGE;
-import com.jcif.opengl.glcompute.histo.Histo2d;
+import com.jcif.opengl.glcompute.histo.GlComputeHisto2d;
 import com.jogamp.nativewindow.AbstractGraphicsDevice;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
@@ -36,7 +36,7 @@ public class Histo2dDemo {
 		sharedContext.makeCurrent();
 		GL4 gl = sharedContext.getGL().getGL4();
 
-		Histo2d computeHandler = new Histo2d(gl);
+		GlComputeHisto2d computeHandler = new GlComputeHisto2d(gl);
 
 		// creqte data
 		int size = 6000000;

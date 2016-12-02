@@ -1,32 +1,27 @@
-package com.jcif.opengl.glpainter.cube;
-
-import java.nio.ByteBuffer;
+package com.jcif.opengl.glpainter.histo;
 
 import com.jcif.opengl.GLBuffer;
 import com.jcif.opengl.GLBufferFactory;
-import com.jcif.opengl.GLBufferFactory.GL_TYPE;
-import com.jcif.opengl.GLBufferFactory.GL_USAGE;
 import com.jcif.opengl.GLPainter;
 import com.jcif.opengl.GLShaderProgram;
-import com.jcif.opengl.GLUtil;
 import com.jogamp.opengl.GL4;
 
-public class CubePainter implements GLPainter<Cube> {
+public class Histo3dPainter implements GLPainter<Histo3d> {
 
 	// storage for Matrices
 	float projMatrix[] = new float[16];
 
 	float viewMatrix[] = new float[16];
 
-	protected Cube cube = new Cube();
+	protected Histo3d histo3d = new Histo3d();
 
-	protected GLShaderProgram cubeProgram;
+	protected GLShaderProgram program;
 
 	private int projMatrixLoc;
 
 	private int viewMatrixLoc;
 
-	public CubePainter() {
+	public Histo3dPainter() {
 
 		this.projMatrix = buildProjectionMatrix(53.13f, 0.75f, 1.0f, 30.0f, this.projMatrix);
 	}
@@ -34,7 +29,7 @@ public class CubePainter implements GLPainter<Cube> {
 	@Override
 	public void init(GL4 gl) {
 
-		cubeProgram = new GLShaderProgram(gl, GLSLCUBE.Vertex, GLSLCUBE.Fragment);
+		program = new GLShaderProgram(gl, GLSLHISTO.Vertex3d, GLSLHISTO.Fragment);
 
 	}
 
@@ -174,23 +169,6 @@ public class CubePainter implements GLPainter<Cube> {
 		System.arraycopy(res, 0, a, 0, 16);
 	}
 
-	protected ByteBuffer createCube() {
-
-		float[] cubeArray = new float[] { -1.0f, -1.0f, -1.0f, // triangle 1 :
-																// begin
-				-1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, // triangle 1 : end
-				1.0f, 1.0f, -1.0f, // triangle 2 : begin
-				-1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, // triangle 2 : end
-				1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f,
-				-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f,
-				-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
-				1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f,
-				1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f,
-				-1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f };
-
-		return GLBufferFactory.asFloatBuffer(cubeArray);
-	}
-
 	public void resize(int x, int y, int width, int height) {
 		float ratio;
 		// Prevent a divide by zero, when window is too short
@@ -203,55 +181,62 @@ public class CubePainter implements GLPainter<Cube> {
 	}
 
 	@Override
-	public void update(Cube t) {
-		cube = t;
+	public void update(Histo3d t) {
+		histo3d = t;
 
 	}
 
 	@Override
 	public void paint(GL4 gl, int... viewport) {
-		setCamera(5f, 5f, 2, 0.5f, 0.5f, -1, this.viewMatrix);
 
-		GLBuffer gpuCube = GLBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
-		gpuCube.bind(gl);
-		ByteBuffer grid = createCube();
-		gpuCube.allocate(gl, grid, grid.capacity());
-		gpuCube.release(gl);
+		if (this.histo3d.getCount() > 0) {
+			setCamera(5f, 5f, 2, 0.5f, 0.5f, -1, this.viewMatrix);
 
-		cubeProgram.beginUse(gl);
+			program.beginUse(gl);
 
-		// Get a handle for our "MVP" uniform
-		// Only during the initialisation
+			// Get a handle for our "MVP" uniform
+			// Only during the initialisation
 
-		// Send our transformation to the currently bound shader, in the "MVP"
-		// uniform
-		// This is done in the main loop since each model will have a different
-		// MVP matrix (At least for the M part)
-		// glUniformMatrix4fv(mvp_handle, 1, GL_FALSE, &mvp[0][0]);
+			// Send our transformation to the currently bound shader, in the
+			// "MVP"
+			// uniform
+			// This is done in the main loop since each model will have a
+			// different
+			// MVP matrix (At least for the M part)
+			// glUniformMatrix4fv(mvp_handle, 1, GL_FALSE, &mvp[0][0]);
 
-		this.projMatrixLoc = gl.glGetUniformLocation(cubeProgram.getId(), "projMatrix");
-		this.viewMatrixLoc = gl.glGetUniformLocation(cubeProgram.getId(), "viewMatrix");
+			this.projMatrixLoc = gl.glGetUniformLocation(program.getId(), "projMatrix");
+			this.viewMatrixLoc = gl.glGetUniformLocation(program.getId(), "viewMatrix");
 
-		// set the view and the projection matrix
-		gl.glUniformMatrix4fv(this.projMatrixLoc, 1, false, this.projMatrix, 0);
-		gl.glUniformMatrix4fv(this.viewMatrixLoc, 1, false, this.viewMatrix, 0);
+			// set the view and the projection matrix
+			gl.glUniformMatrix4fv(this.projMatrixLoc, 1, false, this.projMatrix, 0);
+			gl.glUniformMatrix4fv(this.viewMatrixLoc, 1, false, this.viewMatrix, 0);
 
-		gl.glEnable(GL4.GL_PROGRAM_POINT_SIZE);
+			gl.glEnable(GL4.GL_PROGRAM_POINT_SIZE);
 
-		gl.glEnableVertexAttribArray(0);
+			gl.glEnableVertexAttribArray(0);
+			gl.glEnableVertexAttribArray(1);
 
-		gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, gpuCube.getId());
-		// Associate Vertex attribute 0 with the last bound VBO
-		gl.glVertexAttribPointer(0 /* the vertex attrib ute */, 3, GL4.GL_FLOAT, false /* normalized? */,
-				0 /* stride */, 0 /* The bound VBO data offset */);
+			this.program.setUniform(gl, "pointSize", this.histo3d.getPointSize());
 
-		cubeProgram.setUniform(gl, "color", GLUtil.colorAsVec4(this.cube.getColor()));
+			GLBuffer gpudata = GLBufferFactory.hostoGpuData(this.histo3d.getXYZs(), gl);
+			gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, gpudata.getId());
+			// Associate Vertex attribute 0 with the last bound VBO
+			gl.glVertexAttribPointer(0 /* the vertex attribute */, 3, GL4.GL_FLOAT, false /* normalized? */,
+					0 /* stride */, 0 /* The bound VBO data offset */);
 
-		gl.glDrawArrays(GL4.GL_LINES, 0, 12 * 3);
+			GLBuffer gpuColor = GLBufferFactory.hostoGpuData(this.histo3d.getColors(), gl);
+			gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, gpuColor.getId());
+			// Associate Vertex attribute 0 with the last bound VBO
+			gl.glVertexAttribPointer(1 /* the vertex attribute */, 4, GL4.GL_FLOAT, false /* normalized? */,
+					0 /* stride */, 0 /* The bound VBO data offset */);
 
-		gl.glDisableVertexAttribArray(0);
+			gl.glDrawArrays(GL4.GL_POINTS, 0, this.histo3d.getCount());
 
-		cubeProgram.endUse(gl);
+			gl.glDisableVertexAttribArray(0);
+			gl.glDisableVertexAttribArray(1);
 
+			program.endUse(gl);
+		}
 	}
 }

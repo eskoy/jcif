@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay.histo2d.model;
+package com.jcif.demo.computedisplay.histo3d.model;
 
 import java.nio.ByteBuffer;
 

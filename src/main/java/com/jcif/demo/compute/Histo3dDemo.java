@@ -11,7 +11,7 @@ import com.jcif.opengl.GLBufferFactory.GL_ACCESS;
 import com.jcif.opengl.GLBufferFactory.GL_TYPE;
 import com.jcif.opengl.GLBufferFactory.GL_USAGE;
 import com.jcif.opengl.GLSharedContextInstance;
-import com.jcif.opengl.glcompute.filter.GlComputeFilter2d;
+import com.jcif.opengl.glcompute.histo.GlComputeHisto3d;
 import com.jogamp.nativewindow.AbstractGraphicsDevice;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
@@ -20,7 +20,7 @@ import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLProfile;
 
-public class Filter2dDemo {
+public class Histo3dDemo {
 
 	public static void main(String[] args) {
 		final GLDrawableFactory factory = GLDrawableFactory.getFactory(GLProfile.get(GLProfile.GL4bc));
@@ -36,18 +36,20 @@ public class Filter2dDemo {
 		sharedContext.makeCurrent();
 		GL4 gl = sharedContext.getGL().getGL4();
 
-		GlComputeFilter2d computeHandler = new GlComputeFilter2d(gl);
+		GlComputeHisto3d computeHandler = new GlComputeHisto3d(gl);
 
 		// creqte data
-		int size = 20;
-		float min = 0;
-		float max = 0.5f;
+		int size = 6000000;
 
 		ByteBuffer bbdataA = createNewData(size);
-
 		ByteBuffer bbdataB = createNewData(size);
-
+		ByteBuffer bbdataC = createNewData(size);
 		ByteBuffer bb = createIndices(size);
+
+		GLBuffer gpuSrc_valuesC = GLBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
+		gpuSrc_valuesC.bind(gl);
+		gpuSrc_valuesC.allocate(gl, bbdataC, bbdataC.capacity());
+		gpuSrc_valuesC.release(gl);
 
 		GLBuffer gpuSrc_valuesB = GLBufferFactory.newGLBuffer(gl, GL_TYPE.ARRAY_BUFFER, GL_USAGE.STATIC_DRAW);
 		gpuSrc_valuesB.bind(gl);
@@ -66,19 +68,26 @@ public class Filter2dDemo {
 
 		long time = System.currentTimeMillis();
 
-		GLBuffer filter = computeHandler.filter2d(gl, gpuSrc_indices, size, gpuSrc_valuesA, min, max, gpuSrc_valuesB,
-				min, max);
-		filter.bind(gl);
-		IntBuffer filterData = (filter.mapRange(gl, GL_ACCESS.READ_ONLY, 0, size * Integer.BYTES)).asIntBuffer();
-		filter.unmap(gl);
-		filter.release(gl);
+		GLBuffer[] buffer = { gpuSrc_valuesA, gpuSrc_valuesB, gpuSrc_valuesB };
+
+		float[] min = { 0, 0, 0 };
+		float[] max = { 1, 1, 1 };
+		int[] nbins = { 10, 10, 10 };
+
+		GLBuffer histo = computeHandler.histogram3D(gl, gpuSrc_indices, size, buffer, min, max, nbins);
+		histo.bind(gl);
+		IntBuffer histoData = (histo.mapRange(gl, GL_ACCESS.READ_ONLY, 0,
+				nbins[0] * nbins[1] * nbins[2] * Integer.BYTES)).asIntBuffer();
+		histo.unmap(gl);
+		histo.release(gl);
 
 		int sum = 0;
-		for (int i = 0; i < filterData.capacity(); i++) {
-			int value = filterData.get();
-			System.err.println(" i :" + value);
-
+		for (int i = 0; i < histoData.capacity(); i++) {
+			int bar = histoData.get();
+			sum += bar;
+			System.err.println(" " + i + " " + bar);
 		}
+		System.err.println(" total " + sum);
 
 		time = System.currentTimeMillis() - time;
 		System.err.println("elpased time in ms   :" + time);

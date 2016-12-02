@@ -7,11 +7,11 @@ import com.jcif.opengl.GLBufferFactory.GL_USAGE;
 import com.jcif.opengl.GLComputeProgram;
 import com.jogamp.opengl.GL4;
 
-public class Filter2d {
+public class GlComputeFilter2d {
 
 	protected GLComputeProgram program;
 
-	public Filter2d(GL4 gl) {
+	public GlComputeFilter2d(GL4 gl) {
 		initialize(gl);
 	}
 

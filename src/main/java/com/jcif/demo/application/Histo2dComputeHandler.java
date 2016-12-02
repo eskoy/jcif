@@ -8,16 +8,16 @@ import java.util.Random;
 import com.jcif.opengl.GLBuffer;
 import com.jcif.opengl.GLBufferFactory;
 import com.jcif.opengl.GLBufferFactory.GL_ACCESS;
-import com.jcif.opengl.glcompute.histo.Histo2d;
+import com.jcif.opengl.glcompute.histo.GlComputeHisto2d;
 import com.jogamp.opengl.GL4;
 
 public class Histo2dComputeHandler {
 
-	private Histo2d compute;
+	private GlComputeHisto2d compute;
 
 	public Histo2dComputeHandler(GL4 gl) {
 
-		compute = new Histo2d(gl);
+		compute = new GlComputeHisto2d(gl);
 
 	}
 

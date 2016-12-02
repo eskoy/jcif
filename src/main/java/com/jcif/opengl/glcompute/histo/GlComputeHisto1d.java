@@ -7,11 +7,11 @@ import com.jcif.opengl.GLBufferFactory.GL_USAGE;
 import com.jcif.opengl.GLComputeProgram;
 import com.jogamp.opengl.GL4;
 
-public class Histo1d {
+public class GlComputeHisto1d {
 
 	protected GLComputeProgram program;
 
-	public Histo1d(GL4 gl) {
+	public GlComputeHisto1d(GL4 gl) {
 		initialize(gl);
 	}
 
@@ -25,7 +25,7 @@ public class Histo1d {
 
 		// String prog = GLUtil.loadAsText(getClass(), "Histo1d.comp");
 
-		this.program = new GLComputeProgram(gl, GLHISTO.HISTO1D);
+		this.program = new GLComputeProgram(gl, GLSLHISTO.HISTO1D);
 
 	}
 
