@@ -134,7 +134,7 @@ public class Histo3dMain {
 
 					try {
 						viewModel.setHistoBuffer(get());
-						updateChart(viewModel);
+						updateHisto(viewModel);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -174,7 +174,7 @@ public class Histo3dMain {
 		sharedContext.release();
 
 		gLPainterController.setSharedContext(sharedContext);
-		gLPainterController.addPainter(cubePainter);
+		// gLPainterController.addPainter(cubePainter);
 		gLPainterController.addPainter(histo3dPainter);
 
 		// this.updateChart(viewModel);
@@ -247,12 +247,12 @@ public class Histo3dMain {
 
 	}
 
-	protected void updateChart(ViewModel viewmodel) {
+	protected void updateHisto(ViewModel viewmodel) {
 
 		histo3d.setXYZs(viewmodel.getHistoBuffer()[0]);
 		histo3d.setColors(viewmodel.getHistoBuffer()[1]);
 		// simplification works with square histo
-		histo3d.setCount(viewmodel.getHistoSize() * viewmodel.getHistoSize());
+		histo3d.setCount(viewmodel.getHistoSize() * viewmodel.getHistoSize() * viewmodel.getHistoSize());
 		histo3dPainter.update(histo3d);
 
 	}
@@ -275,4 +275,5 @@ public class Histo3dMain {
 			jframe.setVisible(true);
 		});
 	}
+
 }

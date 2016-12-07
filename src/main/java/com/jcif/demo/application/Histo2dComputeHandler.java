@@ -63,41 +63,59 @@ public class Histo2dComputeHandler {
 
 	}
 
-	public ByteBuffer[] createPointWithHisto(IntBuffer histo, int nabins, int nbbins) {
-		ByteBuffer bb = GLBufferFactory.allocate(nabins * nbbins * Float.BYTES * 2);
+	public ByteBuffer[] createHisto2dFromBuffer(IntBuffer histo, int nabins, int nbbins) {
+
+		int minCount = Integer.MAX_VALUE;
+		int maxCount = Integer.MIN_VALUE;
+		int size = 0;
+		histo.rewind();
+		for (int i = 0; i < histo.capacity(); i++) {
+			int count = histo.get();
+			if (count != 0) {
+				minCount = Math.min(minCount, count);
+				maxCount = Math.max(maxCount, count);
+				size++;
+			}
+		}
+
+		ByteBuffer bb = GLBufferFactory.allocate(size * Float.BYTES * 2);
 		FloatBuffer floatbuffervalues = bb.asFloatBuffer();
-		ByteBuffer bbColor = GLBufferFactory.allocate(nabins * nbbins * Float.BYTES * 4);
+		ByteBuffer bbcount = GLBufferFactory.allocate(size * Float.BYTES);
+		FloatBuffer floatcountvalues = bbcount.asFloatBuffer();
+		ByteBuffer bbColor = GLBufferFactory.allocate(size * Float.BYTES * 4);
 		FloatBuffer floatColorbuffervalues = bbColor.asFloatBuffer();
 
-		Random random = new Random();
-
-		float factor = nabins - 1;
+		histo.rewind();
+		float factorx = nabins - 1;
+		float factory = nbbins - 1;
 
 		for (int i = 0; i < nabins; i++) {
 			for (int j = 0; j < nbbins; j++) {
-				int index = i * nabins + j;
-				if (histo.get(index) != 0) {
 
-					int offset = (i * nabins + j) * 4;
-					int offset2 = (i * nabins + j) * 2;
-					float x = ((i) / factor * 2f) - 1f;
-					float y = ((j) / factor * 2f) - 1f;
+				int count = histo.get();
+				if (count != 0) {
 
-					floatbuffervalues.put(offset2 + 0, x);
-					floatbuffervalues.put(offset2 + 1, y);
+					float normalizecount = (count - minCount) / maxCount;
+					floatcountvalues.put(normalizecount);
+
+					float x = ((i) / factorx * 2f) - 1f;
+					float y = ((j) / factory * 2f) - 1f;
+
+					floatbuffervalues.put(x);
+					floatbuffervalues.put(y);
 
 					float r = 0.25f;
-					float g = random.nextFloat() * 0.25f;
-					float b = random.nextFloat() * 0.25f;
+					float g = 0.25f;
+					float b = 0.25f;
 
-					floatColorbuffervalues.put(offset + 0, r);
-					floatColorbuffervalues.put(offset + 1, g);
-					floatColorbuffervalues.put(offset + 2, b);
-					floatColorbuffervalues.put(offset + 3, 1f);
+					floatColorbuffervalues.put(r);
+					floatColorbuffervalues.put(g);
+					floatColorbuffervalues.put(b);
+					floatColorbuffervalues.put(1f);
 				}
 			}
 		}
-		return new ByteBuffer[] { bb, bbColor };
+		return new ByteBuffer[] { bb, bbColor, bbcount };
 	}
 
 	public static ByteBuffer createNewData(int nb) {

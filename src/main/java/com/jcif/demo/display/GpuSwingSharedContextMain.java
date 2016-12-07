@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay;
+package com.jcif.demo.display;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
@@ -19,7 +19,7 @@ public class GpuSwingSharedContextMain {
 		GLContext sharedContext = GLSharedContextInstance.getInstance().getGLSharedContext();
 		System.err.println(GLSharedContextInstance.getInstance().getGLDeviceProperties());
 
-		GpuRender gpuRender = new GpuRender();
+		Render gpuRender = new Render();
 
 		GLJPanel gljpanel = new GLJPanel(null);
 		gljpanel.setSharedContext(sharedContext);

@@ -28,7 +28,9 @@ public class CubePainter implements GLPainter<Cube> {
 
 	public CubePainter() {
 
-		this.projMatrix = buildProjectionMatrix(53.13f, 0.75f, 1.0f, 30.0f, this.projMatrix);
+		// this.projMatrix = (53.13f, 0.75f, 1.0f, 30.0f,
+		// this.projMatrix);
+		this.projMatrix = buildProjectionMatrix(53.13f, 1f, 1.0f, 30.0f, this.projMatrix);
 	}
 
 	@Override
@@ -174,19 +176,36 @@ public class CubePainter implements GLPainter<Cube> {
 		System.arraycopy(res, 0, a, 0, 16);
 	}
 
+	// protected ByteBuffer createCube() {
+	//
+	// float[] cubeArray = new float[] { -1.0f, -1.0f, -1.0f, // triangle 1 :
+	// // begin
+	// -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, // triangle 1 : end
+	// 1.0f, 1.0f, -1.0f, // triangle 2 : begin
+	// -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, // triangle 2 : end
+	// 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
+	// -1.0f, 1.0f, -1.0f, -1.0f,
+	// -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f,
+	// -1.0f, 1.0f, -1.0f, 1.0f,
+	// -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f,
+	// 1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
+	// 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f,
+	// 1.0f, 1.0f, 1.0f, 1.0f, -1.0f,
+	// 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f,
+	// 1.0f, 1.0f, -1.0f, 1.0f, -1.0f,
+	// -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f
+	// };
+	//
+	// return GLBufferFactory.asFloatBuffer(cubeArray);
+	// }
+
 	protected ByteBuffer createCube() {
 
-		float[] cubeArray = new float[] { -1.0f, -1.0f, -1.0f, // triangle 1 :
-																// begin
-				-1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, // triangle 1 : end
-				1.0f, 1.0f, -1.0f, // triangle 2 : begin
-				-1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, // triangle 2 : end
-				1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f,
-				-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f,
-				-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
-				1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f,
-				1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f,
-				-1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f };
+		float[] cubeArray = new float[] { -1, -1, -1, 1, -1, -1, //
+				1, -1, -1, 1, 1, -1, //
+				1, 1, -1, -1, 1, -1, //
+				-1, 1, -1, -1, -1, -1,//
+		};
 
 		return GLBufferFactory.asFloatBuffer(cubeArray);
 	}
@@ -199,7 +218,8 @@ public class CubePainter implements GLPainter<Cube> {
 			height = 1;
 
 		ratio = (1.0f * width) / height;
-		this.projMatrix = buildProjectionMatrix(53.13f, ratio, 1.0f, 30.0f, this.projMatrix);
+		// this.projMatrix = buildProjectionMatrix(53.13f, ratio, 1.0f, 30.0f,
+		// this.projMatrix);
 	}
 
 	@Override

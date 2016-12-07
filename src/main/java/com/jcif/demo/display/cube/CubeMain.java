@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay;
+package com.jcif.demo.display.cube;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
@@ -10,13 +10,13 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLJPanel;
 
-public class GpuSwingMain {
+public class CubeMain {
 
 	public static void main(String[] args) {
 
 		GLJPanel gljpanel = new GLJPanel();
 
-		GpuCubeRender gpuCubeRender = new GpuCubeRender();
+		CubeRender gpuCubeRender = new CubeRender();
 
 		gljpanel.addGLEventListener(new GLEventListener() {
 

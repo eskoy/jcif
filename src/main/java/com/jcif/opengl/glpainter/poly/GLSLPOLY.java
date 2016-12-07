@@ -6,8 +6,8 @@ import com.jcif.opengl.glpainter.GLSL;
 public enum GLSLPOLY implements GLSLProvider {
 
 	Vertex(String.join(NEW_LINE, //
-			"in  vec4 inVertex;", //
-			"uniform vec4 color;", //
+			"layout (location=0) in  vec4 inVertex;", //
+			"layout (location=0) uniform vec4 color;", //
 			"out vec4 varying_Color;", //
 			"void main(void) {", //
 			"gl_Position =   inVertex;", //

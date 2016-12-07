@@ -18,12 +18,13 @@ import java.nio.IntBuffer;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.SwingWorker.StateValue;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.jcif.demo.application.Histo2dComputeHandler;
 import com.jcif.demo.computedisplay.histo2d.model.BusinessModel;
 import com.jcif.demo.computedisplay.histo2d.model.ViewModel;
+import com.jcif.demo.computedisplay.histo2d.view.ControlPanel;
 import com.jcif.opengl.GLBufferFactory;
 import com.jcif.opengl.GLSharedContextInstance;
 import com.jcif.opengl.glpainter.grid.Grid;
@@ -57,13 +59,13 @@ public class Histo2dMain {
 
 	protected Grid grid = new Grid();
 
-	protected Histo2dPainter scatterChartPainter = new Histo2dPainter();
+	protected Histo2dPainter histo2dPainter = new Histo2dPainter();
 
 	protected Histo2dPainter mousePainter = new Histo2dPainter();
 
 	protected Histo2d mouseData = new Histo2d();
 
-	protected Histo2d scatterChart = new Histo2d();
+	protected Histo2d histo2d = new Histo2d();
 
 	protected JPanel view;
 
@@ -73,7 +75,7 @@ public class Histo2dMain {
 
 	protected ViewModel viewModel;
 
-	protected JButton brushButton = new JButton("Start histo brush ");
+	protected ControlPanel controlPanel = new ControlPanel();
 
 	protected Histo2dComputeHandler histo2dComputeHandler;
 
@@ -98,7 +100,7 @@ public class Histo2dMain {
 		// updateViewModel();
 	}
 
-	public ByteBuffer[] updateViewModel() {
+	public ByteBuffer[] computeHisto2d() {
 
 		final GLDrawableFactory factory = GLDrawableFactory.getFactory(GLProfile.get(GLProfile.GL4bc));
 		final AbstractGraphicsDevice device = GLSharedContextInstance.getInstance().getGLSharedAutoDrawable()
@@ -109,13 +111,15 @@ public class Histo2dMain {
 		GLContext sharedContext = drawable
 				.createContext(GLSharedContextInstance.getInstance().getGLSharedAutoDrawable().getContext());
 		sharedContext.makeCurrent();
-		viewModel.setHistoSize(250);
+
+		int histox = viewModel.getHistoXSize();
+		int histoy = viewModel.getHistoYSize();
+
 		IntBuffer histodata = histo2dComputeHandler.compute(sharedContext.getGL().getGL4(),
 				businessModel.getGpuValueA(), businessModel.getGpuValueB(), businessModel.getGpuValueindices(),
-				businessModel.getDataNumber(), 0, 1.0f, viewModel.getHistoSize(), viewModel.getHistoSize());
+				businessModel.getDataNumber(), 0, 1.0f, histox, histoy);
 
-		ByteBuffer[] data = histo2dComputeHandler.createPointWithHisto(histodata, viewModel.getHistoSize(),
-				viewModel.getHistoSize());
+		ByteBuffer[] data = histo2dComputeHandler.createHisto2dFromBuffer(histodata, histox, histoy);
 
 		sharedContext.release();
 
@@ -144,7 +148,7 @@ public class Histo2dMain {
 
 	}
 
-	public void update() {
+	public void modelToView() {
 
 		final long time = System.currentTimeMillis();
 		if (updatestateValue == null || updatestateValue == StateValue.DONE) {
@@ -152,7 +156,7 @@ public class Histo2dMain {
 				@Override
 				public ByteBuffer[] doInBackground() {
 
-					return updateViewModel();
+					return computeHisto2d();
 				}
 
 				@Override
@@ -160,7 +164,7 @@ public class Histo2dMain {
 
 					try {
 						viewModel.setHistoBuffer(get());
-						updateChart(viewModel);
+						updateHisto2dPainter(viewModel);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -172,7 +176,7 @@ public class Histo2dMain {
 					long newtime = System.currentTimeMillis() - time;
 					System.err.println(
 							"Time to compute & diplay histo is in ms " + newtime + " " + Thread.currentThread());
-					updateGrid(rand.nextInt(20), Color.CYAN);
+
 					gLPainterController.repaint();
 					updatestateValue = this.getState();
 
@@ -200,61 +204,17 @@ public class Histo2dMain {
 		sharedContext.release();
 
 		gLPainterController.setSharedContext(sharedContext);
+		gLPainterController.addPainter(histo2dPainter);
 		gLPainterController.addPainter(gridPainter);
-		gLPainterController.addPainter(scatterChartPainter);
 		gLPainterController.addPainter(mousePainter);
-
-		// this.updateChart(viewModel);
 
 		view = new JPanel(new BorderLayout(1, 1));
 		view.add(gLPainterController.getDisplayComponent(), BorderLayout.CENTER);
-		view.add(brushButton, BorderLayout.NORTH);
+		view.add(controlPanel, BorderLayout.NORTH);
+		this.addControlPanelListener();
 
-		view.setBackground(Color.cyan);
-
-		brushButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gLPainterController.getDisplayComponent().addMouseMotionListener(new MouseMotionListener() {
-
-					@Override
-					public void mouseMoved(MouseEvent e) {
-						float x = e.getX();
-						x /= gLPainterController.getBackGround().getViewPort()[2];
-						float y = e.getY();
-						y /= gLPainterController.getBackGround().getViewPort()[3];
-						x = x * 2 - 1;
-						y = -(y * 2 - 1);
-
-						ByteBuffer[] data = createMouseData(x, y);
-
-						mouseData.setXYs(data[0]);
-						mouseData.setColors(data[1]);
-						mouseData.setPointSize(30f);
-						// simplification works with square histo
-
-						mouseData.setCount(1);
-						mousePainter.update(mouseData);
-
-						if (viewModel.getHistoSize() != 0) {
-							histo2dComputeHandler.filterPoint(viewModel.getHistoBuffer(), x, y, 0.01f);
-							updateChart(viewModel);
-						}
-
-						gLPainterController.getDisplayComponent().repaint();
-
-					}
-
-					@Override
-					public void mouseDragged(MouseEvent e) {
-						// TODO Auto-generated method stub
-
-					}
-				});
-
-			}
-		});
+		this.viewModel.setHistoXSize(controlPanel.getBINS_INIT());
+		this.viewModel.setHistoYSize(controlPanel.getBINS_INIT());
 
 		gLPainterController.getDisplayComponent().addMouseListener(new MouseListener() {
 
@@ -305,7 +265,7 @@ public class Histo2dMain {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				update();
+				modelToView();
 
 			}
 
@@ -318,18 +278,103 @@ public class Histo2dMain {
 
 	}
 
-	protected void updateChart(ViewModel viewmodel) {
+	protected void addControlPanelListener() {
+		controlPanel.getBrushButton().addActionListener(new ActionListener() {
 
-		scatterChart.setXYs(viewmodel.getHistoBuffer()[0]);
-		scatterChart.setColors(viewmodel.getHistoBuffer()[1]);
-		// simplification works with square histo
-		scatterChart.setCount(viewmodel.getHistoSize() * viewmodel.getHistoSize());
-		scatterChartPainter.update(scatterChart);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gLPainterController.getDisplayComponent().addMouseMotionListener(new MouseMotionListener() {
+
+					@Override
+					public void mouseMoved(MouseEvent e) {
+						float x = e.getX();
+						x /= gLPainterController.getBackGround().getViewPort()[2];
+						float y = e.getY();
+						y /= gLPainterController.getBackGround().getViewPort()[3];
+						x = x * 2 - 1;
+						y = -(y * 2 - 1);
+
+						ByteBuffer[] data = createMouseData(x, y);
+
+						mouseData.setXYs(data[0]);
+						mouseData.setColors(data[1]);
+						mouseData.setPointSize(30f);
+						// simplification works with square histo
+
+						mousePainter.update(mouseData);
+
+						if (viewModel.getHistoBuffer()[0] != null) {
+							histo2dComputeHandler.filterPoint(viewModel.getHistoBuffer(), x, y, 0.01f);
+							updateHisto2dPainter(viewModel);
+						}
+
+						gLPainterController.getDisplayComponent().repaint();
+
+					}
+
+					@Override
+					public void mouseDragged(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+
+			}
+		});
+
+		controlPanel.getBinXSlider().addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+
+				if (!controlPanel.getBinXSlider().getValueIsAdjusting()) {
+					int bins = controlPanel.getBinXSlider().getValue();
+					viewModel.setHistoXSize(bins);
+					modelToView();
+				}
+			}
+		});
+
+		controlPanel.getBinYSlider().addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+
+				if (!controlPanel.getBinYSlider().getValueIsAdjusting()) {
+					int bins = controlPanel.getBinYSlider().getValue();
+					viewModel.setHistoYSize(bins);
+					modelToView();
+				}
+			}
+		});
+
+		controlPanel.getHistosize().addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+
+				if (!controlPanel.getHistosize().getValueIsAdjusting()) {
+					int value = controlPanel.getHistosize().getValue();
+					histo2d.setPointSize(value);
+					modelToView();
+				}
+			}
+		});
+
+	}
+
+	protected void updateHisto2dPainter(ViewModel viewmodel) {
+
+		histo2d.setXYs(viewmodel.getHistoBuffer()[0]);
+		histo2d.setColors(viewmodel.getHistoBuffer()[1]);
+		histo2d.setCounts(viewmodel.getHistoBuffer()[2]);
+		histo2dPainter.update(histo2d);
 
 	}
 
 	protected void updateGrid(int nb, Color col) {
-		grid.setColor(col);
+
+		grid.setColor(new Color(col.getRed(), col.getGreen(), col.getBlue(), 60));
 		grid.setStep(nb);
 		gridPainter.update(grid);
 	}

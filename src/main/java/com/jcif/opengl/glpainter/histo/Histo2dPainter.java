@@ -34,7 +34,7 @@ public class Histo2dPainter implements GLPainter<Histo2d> {
 
 	@Override
 	public void paint(GL4 gl, int... viewport) {
-		if (this.histo2d.getCount() > 0) {
+		if (this.histo2d.getCounts() != null) {
 			this.program.beginUse(gl);
 			gl.glEnable(GL4.GL_PROGRAM_POINT_SIZE);
 			gl.glEnableVertexAttribArray(0);
@@ -54,7 +54,7 @@ public class Histo2dPainter implements GLPainter<Histo2d> {
 			gl.glVertexAttribPointer(1 /* the vertex attribute */, 4, GL4.GL_FLOAT, false /* normalized? */,
 					0 /* stride */, 0 /* The bound VBO data offset */);
 
-			gl.glDrawArrays(GL4.GL_POINTS, 0, this.histo2d.getCount());
+			gl.glDrawArrays(GL4.GL_POINTS, 0, this.histo2d.getCounts().capacity() / Float.BYTES);
 
 			gl.glDisableVertexAttribArray(0);
 			gl.glDisableVertexAttribArray(1);

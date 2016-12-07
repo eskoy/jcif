@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay;
+package com.jcif.demo.display.cube;
 
 import java.awt.Color;
 
@@ -7,9 +7,10 @@ import com.jcif.opengl.glpainter.cube.CubePainter;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL4;
 
-public class GpuCubeRender {
+public class CubeRender {
 
 	public CubePainter painter = new CubePainter();
+
 	public Cube cube = new Cube();
 
 	public void init(GL4 gl) {
@@ -17,7 +18,7 @@ public class GpuCubeRender {
 		this.painter.init(gl);
 	}
 
-	public GpuCubeRender() {
+	public CubeRender() {
 
 	}
 

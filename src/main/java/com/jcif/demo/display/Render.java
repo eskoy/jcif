@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay;
+package com.jcif.demo.display;
 
 import java.awt.Color;
 
@@ -7,7 +7,7 @@ import com.jcif.opengl.glpainter.grid.GridPainter;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL4;
 
-public class GpuRender {
+public class Render {
 
 	public GridPainter gridPainter = new GridPainter();
 
@@ -18,7 +18,7 @@ public class GpuRender {
 		this.gridPainter.init(gl);
 	}
 
-	public GpuRender() {
+	public Render() {
 
 	}
 

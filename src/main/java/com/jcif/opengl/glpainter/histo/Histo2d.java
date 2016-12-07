@@ -5,8 +5,18 @@ import java.nio.ByteBuffer;
 public class Histo2d {
 
 	protected ByteBuffer XYs;
+	protected ByteBuffer Counts;
+
+	public ByteBuffer getCounts() {
+		return Counts;
+	}
+
+	public void setCounts(ByteBuffer counts) {
+		Counts = counts;
+	}
+
 	protected ByteBuffer Colors;
-	protected int count = 0;
+
 	protected float pointSize = 3f;
 
 	public float getPointSize() {
@@ -31,14 +41,6 @@ public class Histo2d {
 
 	public void setColors(ByteBuffer colors) {
 		Colors = colors;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
 	}
 
 }

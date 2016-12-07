@@ -4,16 +4,26 @@ import java.nio.ByteBuffer;
 
 public class ViewModel {
 
-	protected int histoSize = 0;
+	protected int histoXSize = 0;
+
+	protected int histoYSize = 0;
+
+	public int getHistoYSize() {
+		return histoYSize;
+	}
+
+	public void setHistoYSize(int histoYSize) {
+		this.histoYSize = histoYSize;
+	}
 
 	protected ByteBuffer[] histoBuffer = new ByteBuffer[2];
 
-	public int getHistoSize() {
-		return histoSize;
+	public int getHistoXSize() {
+		return histoXSize;
 	}
 
-	public void setHistoSize(int histoSize) {
-		this.histoSize = histoSize;
+	public void setHistoXSize(int histoSize) {
+		this.histoXSize = histoSize;
 	}
 
 	public ByteBuffer[] getHistoBuffer() {

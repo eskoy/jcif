@@ -32,7 +32,7 @@ public class Histo3dComputeHandler {
 	}
 
 	public ByteBuffer[] createPointWithHisto(IntBuffer histo, int[] binCounts) {
-		ByteBuffer bb = GLBufferFactory.allocate(binCounts[0] * binCounts[1] * binCounts[2] * Float.BYTES * 2);
+		ByteBuffer bb = GLBufferFactory.allocate(binCounts[0] * binCounts[1] * binCounts[2] * Float.BYTES * 3);
 		FloatBuffer floatbuffervalues = bb.asFloatBuffer();
 		ByteBuffer bbColor = GLBufferFactory.allocate(binCounts[0] * binCounts[1] * binCounts[2] * Float.BYTES * 4);
 		FloatBuffer floatColorbuffervalues = bbColor.asFloatBuffer();
@@ -49,12 +49,14 @@ public class Histo3dComputeHandler {
 					if (histo.get(index) != 0) {
 
 						int offset = (i * j * binCounts[1] + k) * 4;
-						int offset2 = (i * j * binCounts[1] + k) * 2;
+						int offset2 = (i * j * binCounts[1] + k) * 3;
 						float x = ((i) / factor * 2f) - 1f;
 						float y = ((j) / factor * 2f) - 1f;
+						float z = ((k) / factor * 2f) - 1f;
 
 						floatbuffervalues.put(offset2 + 0, x);
 						floatbuffervalues.put(offset2 + 1, y);
+						floatbuffervalues.put(offset2 + 2, z);
 
 						float r = 0.25f;
 						float g = random.nextFloat() * 0.25f;

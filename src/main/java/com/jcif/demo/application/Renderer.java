@@ -8,13 +8,13 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jcif.opengl.GLDeviceProperties;
 import com.jcif.opengl.GLBuffer;
 import com.jcif.opengl.GLBufferFactory;
+import com.jcif.opengl.GLDeviceProperties;
 import com.jcif.opengl.glpainter.grid.Grid;
 import com.jcif.opengl.glpainter.grid.GridPainter;
-import com.jcif.opengl.glpainter.histo.Histo2dPainter;
 import com.jcif.opengl.glpainter.histo.Histo2d;
+import com.jcif.opengl.glpainter.histo.Histo2dPainter;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL;
@@ -120,11 +120,11 @@ public class Renderer implements GLEventListener {
 
 			IntBuffer histodata = histo2dComputeHandler.compute(gl, gpuValueA, gpuValueB, gpuValueindices, size, 0,
 					rand.nextFloat(), histosize, histosize);
-			bbHisto = histo2dComputeHandler.createPointWithHisto(histodata, histosize, histosize);
+			bbHisto = histo2dComputeHandler.createHisto2dFromBuffer(histodata, histosize, histosize);
 			Histo2d chart = new Histo2d();
 			chart.setXYs(bbHisto[0]);
 			chart.setColors(bbHisto[1]);
-			chart.setCount(histosize * histosize);
+
 			scatterChartPainter.update(chart);
 
 			grid.setStep(rand.nextInt(8));
