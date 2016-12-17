@@ -30,8 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jcif.demo.application.Histo2dComputeHandler;
-import com.jcif.demo.computedisplay.histo2d.model.BusinessModel;
-import com.jcif.demo.computedisplay.histo2d.model.ViewModel;
+import com.jcif.demo.computedisplay.histo2d.data.viewdata.BusinessModel;
+import com.jcif.demo.computedisplay.histo2d.data.viewdata.ViewModel;
 import com.jcif.demo.computedisplay.histo2d.view.ControlPanel;
 import com.jcif.opengl.GLBufferFactory;
 import com.jcif.opengl.GLSharedContextInstance;
