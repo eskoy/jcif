@@ -27,7 +27,7 @@ public class MinMaxProcess implements StructureProcess {
 		int i = 0;
 		for (float[] minmax : minMaxs) {
 			minmax[0] = Math.min(minmax[0], ds.getValue(members[i], index));
-			minmax[1] = Math.max(minmax[0], ds.getValue(members[i], index));
+			minmax[1] = Math.max(minmax[1], ds.getValue(members[i], index));
 			i++;
 		}
 
