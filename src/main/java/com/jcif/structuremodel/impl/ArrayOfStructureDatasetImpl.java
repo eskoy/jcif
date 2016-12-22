@@ -7,11 +7,14 @@ import com.jcif.structuremodel.StructureMember;
 
 public class ArrayOfStructureDatasetImpl implements StructureDataset {
 
-	ByteBuffer buffer;
+	protected ByteBuffer buffer;
 
-	BufferAcces[] bufferAccess;
+	protected BufferAcces[] bufferAccess;
 
-	public ArrayOfStructureDatasetImpl(int size, StructureMember... definitions) {
+	protected int size;
+
+	public ArrayOfStructureDatasetImpl(int s, StructureMember... definitions) {
+		size = s;
 		buffer = ByteBuffer.allocate(size * definitions[0].getMemoryDefinition().structureSize());
 		bufferAccess = new BufferAcces[definitions.length];
 		int i = 0;
@@ -36,6 +39,11 @@ public class ArrayOfStructureDatasetImpl implements StructureDataset {
 	public void setValue(StructureMember member, int index, float value) {
 		bufferAccess[member.ordinal()].setValue(index, value);
 
+	}
+
+	@Override
+	public int getSize() {
+		return size;
 	}
 
 }
