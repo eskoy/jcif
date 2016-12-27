@@ -1,8 +1,8 @@
-package com.jcif.structuremodel.impl;
+package com.jcif.structure.model.impl;
 
 import java.nio.ByteBuffer;
 
-import com.jcif.structuremodel.StructureMember;
+import com.jcif.structure.model.StructureMember;
 
 public class FloatBufferAccesImpl implements BufferAcces {
 

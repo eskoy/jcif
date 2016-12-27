@@ -1,6 +1,6 @@
-package com.jcif.structuremodel;
+package com.jcif.structure.model;
 
-import com.jcif.structuremodel.impl.ArrayOfStructureDatasetImpl;
+import com.jcif.structure.model.impl.ArrayOfStructureDatasetImpl;
 
 public class StructureDatasets {
 

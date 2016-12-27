@@ -1,34 +1,34 @@
 package com.jcif.demo.computedisplay.histo2d.data.viewdata;
 
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Random;
 
 import com.jcif.opengl.GLBuffer;
 import com.jcif.opengl.GLBufferFactory;
+import com.jcif.opengl.util.DataUtilities;
+import com.jcif.opengl.util.DataUtilities.DATA_TYPE;
 import com.jogamp.opengl.GL4;
 
 public class BusinessModel {
 
 	private int dataNumber;
 
-	private GLBuffer gpuValueB;
+	private GLBuffer gpuValueX;
 
 	private GLBuffer gpuValueindices;
 
-	private GLBuffer gpuValueA;
+	private GLBuffer gpuValueY;
 
 	public int getDataNumber() {
 		return dataNumber;
 	}
 
-	public GLBuffer getGpuValueA() {
-		return gpuValueA;
+	public GLBuffer getGpuValueY() {
+		return gpuValueY;
 	}
 
-	public GLBuffer getGpuValueB() {
-		return gpuValueB;
+	public GLBuffer getGpuValueX() {
+		return gpuValueX;
 	}
 
 	public GLBuffer getGpuValueindices() {
@@ -41,26 +41,10 @@ public class BusinessModel {
 
 	protected void init(int size, GL4 gl) {
 		dataNumber = size;
-		gpuValueA = GLBufferFactory.hostoGpuData(this.createNewData(size), gl);
-		gpuValueB = GLBufferFactory.hostoGpuData(this.createNewData(size), gl);
+		gpuValueX = GLBufferFactory.hostoGpuData(DataUtilities.createNewData1d(dataNumber, DATA_TYPE.LINEAR), gl);
+		gpuValueY = GLBufferFactory.hostoGpuData(DataUtilities.createNewData1d(dataNumber, DATA_TYPE.COSINUS), gl);
 		gpuValueindices = GLBufferFactory.hostoGpuData(this.createIndices(size), gl);
 
-	}
-
-	public ByteBuffer createNewData(int nb) {
-
-		ByteBuffer bb = GLBufferFactory.allocate(nb * Float.BYTES);
-		FloatBuffer floatbuffervalues = bb.asFloatBuffer();
-
-		Random rnd = new Random();
-		for (int i = 0; i < nb; i++) {
-			// ID
-			floatbuffervalues.put(i, rnd.nextFloat());
-			// X
-
-		}
-
-		return bb;
 	}
 
 	public ByteBuffer createIndices(int nb) {

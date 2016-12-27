@@ -1,9 +1,9 @@
-package com.jcif.structuremodel.impl;
+package com.jcif.structure.model.impl;
 
 import java.nio.ByteBuffer;
 
-import com.jcif.structuremodel.StructureDataset;
-import com.jcif.structuremodel.StructureMember;
+import com.jcif.structure.model.StructureDataset;
+import com.jcif.structure.model.StructureMember;
 
 public class ArrayOfStructureDatasetImpl implements StructureDataset {
 

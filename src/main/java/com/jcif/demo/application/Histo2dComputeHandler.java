@@ -98,8 +98,8 @@ public class Histo2dComputeHandler {
 					float normalizecount = (count - minCount) / maxCount;
 					floatcountvalues.put(normalizecount);
 
-					float x = ((i) / factorx * 2f) - 1f;
-					float y = ((j) / factory * 2f) - 1f;
+					float x = (i / factorx) * 2f - 1f;
+					float y = (j / factory) * 2f - 1f;
 
 					floatbuffervalues.put(x);
 					floatbuffervalues.put(y);

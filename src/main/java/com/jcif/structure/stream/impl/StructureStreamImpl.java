@@ -1,11 +1,11 @@
-package com.jcif.structurestream.impl;
+package com.jcif.structure.stream.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jcif.structuremodel.StructureDataset;
-import com.jcif.structurestream.StructureProcess;
-import com.jcif.structurestream.StructureStream;
+import com.jcif.structure.model.StructureDataset;
+import com.jcif.structure.process.StructureProcess;
+import com.jcif.structure.stream.StructureStream;
 
 public class StructureStreamImpl implements StructureStream {
 

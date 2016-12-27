@@ -1,7 +1,7 @@
-package com.jcif.structurestream;
+package com.jcif.structure.process;
 
-import com.jcif.structuremodel.StructureDataset;
-import com.jcif.structuremodel.StructureMember;
+import com.jcif.structure.model.StructureDataset;
+import com.jcif.structure.model.StructureMember;
 
 public class MinMaxProcess implements StructureProcess {
 

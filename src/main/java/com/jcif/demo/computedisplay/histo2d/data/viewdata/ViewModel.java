@@ -12,8 +12,8 @@ public class ViewModel {
 		return histoYSize;
 	}
 
-	public void setHistoYSize(int histoYSize) {
-		this.histoYSize = histoYSize;
+	public void setHistoYSize(int hy) {
+		this.histoYSize = hy;
 	}
 
 	protected ByteBuffer[] histoBuffer = new ByteBuffer[2];
@@ -22,8 +22,8 @@ public class ViewModel {
 		return histoXSize;
 	}
 
-	public void setHistoXSize(int histoSize) {
-		this.histoXSize = histoSize;
+	public void setHistoXSize(int hx) {
+		this.histoXSize = hx;
 	}
 
 	public ByteBuffer[] getHistoBuffer() {

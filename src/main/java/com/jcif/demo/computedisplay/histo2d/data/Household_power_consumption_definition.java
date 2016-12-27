@@ -1,10 +1,10 @@
 package com.jcif.demo.computedisplay.histo2d.data;
 
-import com.jcif.structuremodel.DISPLAY;
-import com.jcif.structuremodel.ENCODING;
-import com.jcif.structuremodel.MemberBinaryDefinition;
-import com.jcif.structuremodel.MemberMemoryDefinition;
-import com.jcif.structuremodel.StructureMember;
+import com.jcif.structure.model.DISPLAY;
+import com.jcif.structure.model.ENCODING;
+import com.jcif.structure.model.MemberBinaryDefinition;
+import com.jcif.structure.model.MemberMemoryDefinition;
+import com.jcif.structure.model.StructureMember;
 
 public enum Household_power_consumption_definition implements StructureMember {
 

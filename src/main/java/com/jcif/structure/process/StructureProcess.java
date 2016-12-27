@@ -1,6 +1,6 @@
-package com.jcif.structurestream;
+package com.jcif.structure.process;
 
-import com.jcif.structuremodel.StructureDataset;
+import com.jcif.structure.model.StructureDataset;
 
 public interface StructureProcess {
 

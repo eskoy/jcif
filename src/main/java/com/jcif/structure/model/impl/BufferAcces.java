@@ -1,4 +1,4 @@
-package com.jcif.structuremodel.impl;
+package com.jcif.structure.model.impl;
 
 public interface BufferAcces {
 

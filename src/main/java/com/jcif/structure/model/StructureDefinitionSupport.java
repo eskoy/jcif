@@ -1,4 +1,4 @@
-package com.jcif.structuremodel;
+package com.jcif.structure.model;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

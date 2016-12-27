@@ -1,4 +1,6 @@
-package com.jcif.structurestream;
+package com.jcif.structure.stream;
+
+import com.jcif.structure.process.StructureProcess;
 
 public interface StructureStream {
 

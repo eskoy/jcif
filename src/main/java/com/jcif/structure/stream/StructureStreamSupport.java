@@ -1,7 +1,7 @@
-package com.jcif.structurestream;
+package com.jcif.structure.stream;
 
-import com.jcif.structuremodel.StructureDataset;
-import com.jcif.structurestream.impl.StructureStreamImpl;
+import com.jcif.structure.model.StructureDataset;
+import com.jcif.structure.stream.impl.StructureStreamImpl;
 
 public class StructureStreamSupport {
 

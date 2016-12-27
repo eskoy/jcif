@@ -116,10 +116,10 @@ public class Histo2dMain {
 		int histoy = viewModel.getHistoYSize();
 
 		IntBuffer histodata = histo2dComputeHandler.compute(sharedContext.getGL().getGL4(),
-				businessModel.getGpuValueA(), businessModel.getGpuValueB(), businessModel.getGpuValueindices(),
-				businessModel.getDataNumber(), 0, 1.0f, histox, histoy);
+				businessModel.getGpuValueY(), businessModel.getGpuValueX(), businessModel.getGpuValueindices(),
+				businessModel.getDataNumber(), 0, 1f, histox, histoy);
 
-		ByteBuffer[] data = histo2dComputeHandler.createHisto2dFromBuffer(histodata, histox, histoy);
+		ByteBuffer[] data = histo2dComputeHandler.createHisto2dFromBuffer(histodata, histoy, histox);
 
 		sharedContext.release();
 
@@ -199,7 +199,7 @@ public class Histo2dMain {
 		sharedContext.makeCurrent();
 		viewModel = new ViewModel();
 
-		businessModel = new BusinessModel(6000000, sharedContext.getGL().getGL4());
+		businessModel = new BusinessModel(1000000, sharedContext.getGL().getGL4());
 		histo2dComputeHandler = new Histo2dComputeHandler(sharedContext.getGL().getGL4());
 		sharedContext.release();
 
