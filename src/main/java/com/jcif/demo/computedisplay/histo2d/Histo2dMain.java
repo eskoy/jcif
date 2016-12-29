@@ -2,6 +2,7 @@ package com.jcif.demo.computedisplay.histo2d;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,9 +21,13 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.SwingWorker.StateValue;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -32,7 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.jcif.demo.application.Histo2dComputeHandler;
 import com.jcif.demo.computedisplay.histo2d.data.viewdata.BusinessModel;
 import com.jcif.demo.computedisplay.histo2d.data.viewdata.ViewModel;
-import com.jcif.demo.computedisplay.histo2d.view.ControlPanel;
+import com.jcif.demo.computedisplay.histo2d.view.control.ControlPanel;
 import com.jcif.opengl.GLBufferFactory;
 import com.jcif.opengl.GLSharedContextInstance;
 import com.jcif.opengl.glpainter.grid.Grid;
@@ -75,7 +80,7 @@ public class Histo2dMain {
 
 	protected ViewModel viewModel;
 
-	protected ControlPanel controlPanel = new ControlPanel();
+	protected ControlPanel controlPanel;
 
 	protected Histo2dComputeHandler histo2dComputeHandler;
 
@@ -87,6 +92,7 @@ public class Histo2dMain {
 	public Histo2dMain() {
 
 		try {
+			laf();
 			init();
 
 		} catch (InvocationTargetException e) {
@@ -124,6 +130,20 @@ public class Histo2dMain {
 		sharedContext.release();
 
 		return data;
+	}
+
+	protected void laf() {
+		try {
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (Exception e) {
+			// If Nimbus is not available, you can set the GUI to another look
+			// and feel.
+		}
 	}
 
 	public ByteBuffer[] createMouseData(float x, float y) {
@@ -199,18 +219,40 @@ public class Histo2dMain {
 		sharedContext.makeCurrent();
 		viewModel = new ViewModel();
 
+		// init model
 		businessModel = new BusinessModel(1000000, sharedContext.getGL().getGL4());
 		histo2dComputeHandler = new Histo2dComputeHandler(sharedContext.getGL().getGL4());
 		sharedContext.release();
 
+		// compose opengl layer
+
+		gLPainterController.getBackGround().setColor(Color.WHITE);
 		gLPainterController.setSharedContext(sharedContext);
 		gLPainterController.addPainter(histo2dPainter);
 		gLPainterController.addPainter(gridPainter);
 		gLPainterController.addPainter(mousePainter);
 
+		// construct main view
+
+		controlPanel = new ControlPanel();
+
+		// Create a split pane with the two scroll panes in it.
+
+		JScrollPane controlPane = new JScrollPane(controlPanel.getView());
+		JScrollPane histoPane = new JScrollPane(gLPainterController.getDisplayComponent());
+
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPane, histoPane);
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(280);
+
+		// Provide minimum sizes for the two components in the split pane
+
+		controlPane.setMinimumSize(new Dimension(280, 500));
+		histoPane.setMinimumSize(new Dimension(500, 500));
+
 		view = new JPanel(new BorderLayout(1, 1));
-		view.add(gLPainterController.getDisplayComponent(), BorderLayout.CENTER);
-		view.add(controlPanel, BorderLayout.NORTH);
+		view.add(splitPane);
+
 		this.addControlPanelListener();
 
 		this.viewModel.setHistoXSize(controlPanel.getBINS_INIT());
@@ -279,7 +321,7 @@ public class Histo2dMain {
 	}
 
 	protected void addControlPanelListener() {
-		controlPanel.getBrushButton().addActionListener(new ActionListener() {
+		controlPanel.getHistoBrushButton().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -322,39 +364,39 @@ public class Histo2dMain {
 			}
 		});
 
-		controlPanel.getBinXSlider().addChangeListener(new ChangeListener() {
+		controlPanel.getHistoBinXSlider().addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
 
-				if (!controlPanel.getBinXSlider().getValueIsAdjusting()) {
-					int bins = controlPanel.getBinXSlider().getValue();
+				if (!controlPanel.getHistoBinXSlider().getValueIsAdjusting()) {
+					int bins = controlPanel.getHistoBinXSlider().getValue();
 					viewModel.setHistoXSize(bins);
 					modelToView();
 				}
 			}
 		});
 
-		controlPanel.getBinYSlider().addChangeListener(new ChangeListener() {
+		controlPanel.getHistoBinYSlider().addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
 
-				if (!controlPanel.getBinYSlider().getValueIsAdjusting()) {
-					int bins = controlPanel.getBinYSlider().getValue();
+				if (!controlPanel.getHistoBinYSlider().getValueIsAdjusting()) {
+					int bins = controlPanel.getHistoBinYSlider().getValue();
 					viewModel.setHistoYSize(bins);
 					modelToView();
 				}
 			}
 		});
 
-		controlPanel.getHistosize().addChangeListener(new ChangeListener() {
+		controlPanel.getHistoSizeSlider().addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
 
-				if (!controlPanel.getHistosize().getValueIsAdjusting()) {
-					int value = controlPanel.getHistosize().getValue();
+				if (!controlPanel.getHistoSizeSlider().getValueIsAdjusting()) {
+					int value = controlPanel.getHistoSizeSlider().getValue();
 					histo2d.setPointSize(value);
 					modelToView();
 				}
@@ -393,7 +435,7 @@ public class Histo2dMain {
 
 			Histo2dMain ctrl = new Histo2dMain();
 			jframe.getContentPane().add(ctrl.getView(), BorderLayout.CENTER);
-			jframe.setSize(640, 480);
+			jframe.setSize(1280, 720);
 			jframe.setVisible(true);
 		});
 	}
