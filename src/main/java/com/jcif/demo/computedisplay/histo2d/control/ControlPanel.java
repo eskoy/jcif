@@ -1,22 +1,21 @@
-package com.jcif.demo.computedisplay.histo2d.view.control;
+package com.jcif.demo.computedisplay.histo2d.control;
 
 import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import com.jcif.awt.View;
-import com.jcif.opengl.util.DataUtilities.DATA_TYPE;
 
 public class ControlPanel implements View {
 
-	JPanel view = new JPanel();
+	protected JPanel view = new JPanel();
+
+	protected JTabbedPane tabpane;
 
 	int BINS_MIN = 5;
 
@@ -36,26 +35,9 @@ public class ControlPanel implements View {
 
 	protected JSlider histoSizeSlider = new JSlider(JSlider.HORIZONTAL, 1, 20, 3);
 
-	protected JComboBox<DATA_TYPE> dataXtype = new JComboBox<>(DATA_TYPE.values());
-
-	protected JComboBox<DATA_TYPE> dataYtype = new JComboBox<>(DATA_TYPE.values());
-
-	protected JTextField datanumber = new JTextField("number");
-
 	public ControlPanel() {
 
 		initLayout();
-	}
-
-	JPanel buildDataPanel() {
-
-		JPanel panel = new JPanel();
-
-		panel.setLayout(new GridLayout(3, 1));
-		panel.add(datanumber);
-		panel.add(dataXtype);
-		panel.add(dataYtype);
-		return panel;
 	}
 
 	JPanel buildHistoPanel() {
@@ -97,11 +79,14 @@ public class ControlPanel implements View {
 
 	protected void initLayout() {
 		view.setLayout(new GridLayout(1, 1));
-		JTabbedPane tabpane = new JTabbedPane();
-
+		tabpane = new JTabbedPane();
 		view.add(tabpane);
-		tabpane.add("Data", buildDataPanel());
 		tabpane.add("Histogram", buildHistoPanel());
+
+	}
+
+	public void add(int index, String name, View view) {
+		tabpane.insertTab(name, null, view.getView(), name, index);
 
 	}
 

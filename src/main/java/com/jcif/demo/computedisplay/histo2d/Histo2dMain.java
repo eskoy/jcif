@@ -34,16 +34,18 @@ import javax.swing.event.ChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jcif.awt.CallBack;
 import com.jcif.demo.application.Histo2dComputeHandler;
-import com.jcif.demo.computedisplay.histo2d.data.viewdata.BusinessModel;
-import com.jcif.demo.computedisplay.histo2d.data.viewdata.ViewModel;
-import com.jcif.demo.computedisplay.histo2d.view.control.ControlPanel;
+import com.jcif.demo.computedisplay.histo2d.control.ControlPanel;
+import com.jcif.demo.computedisplay.histo2d.control.histo2d.DataView;
+import com.jcif.demo.computedisplay.histo2d.source.SourceCtrl;
 import com.jcif.opengl.GLBufferFactory;
 import com.jcif.opengl.GLSharedContextInstance;
 import com.jcif.opengl.glpainter.grid.Grid;
 import com.jcif.opengl.glpainter.grid.GridPainter;
 import com.jcif.opengl.glpainter.histo.Histo2d;
 import com.jcif.opengl.glpainter.histo.Histo2dPainter;
+import com.jcif.opengl.util.DataUtilities.DATA_TYPE;
 import com.jcif.opengl.windowtoolkit.GLPainterController;
 import com.jcif.opengl.windowtoolkit.WindowToolkitFactory;
 import com.jogamp.nativewindow.AbstractGraphicsDevice;
@@ -54,7 +56,7 @@ import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 
-public class Histo2dMain {
+public class Histo2dMain implements CallBack {
 
 	private final static Logger logger = LoggerFactory.getLogger(Histo2dMain.class);
 
@@ -76,9 +78,9 @@ public class Histo2dMain {
 
 	protected StateValue updatestateValue;
 
-	protected BusinessModel businessModel;
+	protected SourceCtrl sourceCtrl;
 
-	protected ViewModel viewModel;
+	protected DataView viewModel;
 
 	protected ControlPanel controlPanel;
 
@@ -122,8 +124,9 @@ public class Histo2dMain {
 		int histoy = viewModel.getHistoYSize();
 
 		IntBuffer histodata = histo2dComputeHandler.compute(sharedContext.getGL().getGL4(),
-				businessModel.getGpuValueY(), businessModel.getGpuValueX(), businessModel.getGpuValueindices(),
-				businessModel.getDataNumber(), 0, 1f, histox, histoy);
+				sourceCtrl.getModel().getGpuValueY(), sourceCtrl.getModel().getGpuValueX(),
+				sourceCtrl.getModel().getGpuValueindices(), sourceCtrl.getModel().getDataNumber(), 0, 1f, histox,
+				histoy);
 
 		ByteBuffer[] data = histo2dComputeHandler.createHisto2dFromBuffer(histodata, histoy, histox);
 
@@ -168,6 +171,7 @@ public class Histo2dMain {
 
 	}
 
+	@Override
 	public void modelToView() {
 
 		final long time = System.currentTimeMillis();
@@ -217,10 +221,12 @@ public class Histo2dMain {
 		logger.info("" + GLSharedContextInstance.getInstance().getGLDeviceProperties());
 
 		sharedContext.makeCurrent();
-		viewModel = new ViewModel();
+		viewModel = new DataView();
 
-		// init model
-		businessModel = new BusinessModel(1000000, sharedContext.getGL().getGL4());
+		// init source
+		sourceCtrl = new SourceCtrl(this);
+		sourceCtrl.computeNewData(1000000, DATA_TYPE.LINEAR, DATA_TYPE.COSINUS, sharedContext.getGL().getGL4());
+
 		histo2dComputeHandler = new Histo2dComputeHandler(sharedContext.getGL().getGL4());
 		sharedContext.release();
 
@@ -235,7 +241,7 @@ public class Histo2dMain {
 		// construct main view
 
 		controlPanel = new ControlPanel();
-
+		controlPanel.add(0, "Data", sourceCtrl.getView());
 		// Create a split pane with the two scroll panes in it.
 
 		JScrollPane controlPane = new JScrollPane(controlPanel.getView());
@@ -405,7 +411,7 @@ public class Histo2dMain {
 
 	}
 
-	protected void updateHisto2dPainter(ViewModel viewmodel) {
+	protected void updateHisto2dPainter(DataView viewmodel) {
 
 		histo2d.setXYs(viewmodel.getHistoBuffer()[0]);
 		histo2d.setColors(viewmodel.getHistoBuffer()[1]);

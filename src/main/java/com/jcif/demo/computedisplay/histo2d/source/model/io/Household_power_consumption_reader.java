@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay.histo2d.data.binary;
+package com.jcif.demo.computedisplay.histo2d.source.model.io;
 
 import java.io.BufferedReader;
 import java.nio.charset.Charset;
@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 
-import com.jcif.demo.computedisplay.histo2d.data.Household_power_consumption_definition;
+import com.jcif.demo.computedisplay.histo2d.source.model.Household_power_consumption_definition;
 import com.jcif.structure.model.StructureDataset;
 import com.jcif.structure.model.StructureDatasets;
 

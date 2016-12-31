@@ -1,9 +1,9 @@
-package com.jcif.demo.computedisplay.histo2d.data.binary;
+package com.jcif.demo.computedisplay.histo2d.source.model.io;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
-import com.jcif.demo.computedisplay.histo2d.data.Household_power_consumption_definition;
+import com.jcif.demo.computedisplay.histo2d.source.model.Household_power_consumption_definition;
 import com.jcif.opengl.GLBufferFactory;
 import com.jcif.structure.model.StructureDataset;
 import com.jcif.structure.process.MinMaxProcess;

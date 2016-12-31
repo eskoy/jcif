@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay.histo2d.data;
+package com.jcif.demo.computedisplay.histo2d.source.model;
 
 import com.jcif.structure.model.DISPLAY;
 import com.jcif.structure.model.ENCODING;

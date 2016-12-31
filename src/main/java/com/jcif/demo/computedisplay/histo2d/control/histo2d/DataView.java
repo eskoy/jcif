@@ -1,8 +1,8 @@
-package com.jcif.demo.computedisplay.histo2d.data.viewdata;
+package com.jcif.demo.computedisplay.histo2d.control.histo2d;
 
 import java.nio.ByteBuffer;
 
-public class ViewModel {
+public class DataView {
 
 	protected int histoXSize = 0;
 
