@@ -48,12 +48,7 @@ import com.jcif.opengl.glpainter.histo.Histo2dPainter;
 import com.jcif.opengl.util.DataUtilities.DATA_TYPE;
 import com.jcif.opengl.windowtoolkit.GLPainterController;
 import com.jcif.opengl.windowtoolkit.WindowToolkitFactory;
-import com.jogamp.nativewindow.AbstractGraphicsDevice;
-import com.jogamp.opengl.GLCapabilitiesImmutable;
 import com.jogamp.opengl.GLContext;
-import com.jogamp.opengl.GLDrawable;
-import com.jogamp.opengl.GLDrawableFactory;
-import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 
 public class Histo2dMain implements CallBack {
@@ -110,14 +105,21 @@ public class Histo2dMain implements CallBack {
 
 	public ByteBuffer[] computeHisto2d() {
 
-		final GLDrawableFactory factory = GLDrawableFactory.getFactory(GLProfile.get(GLProfile.GL4bc));
-		final AbstractGraphicsDevice device = GLSharedContextInstance.getInstance().getGLSharedAutoDrawable()
-				.getNativeSurface().getGraphicsConfiguration().getScreen().getDevice();
-		GLCapabilitiesImmutable caps = GLSharedContextInstance.getInstance().getGLCapabilities();
-		final GLDrawable drawable = factory.createDummyDrawable(device, true, caps, null);
-		drawable.setRealized(true);
-		GLContext sharedContext = drawable
-				.createContext(GLSharedContextInstance.getInstance().getGLSharedAutoDrawable().getContext());
+		// final GLDrawableFactory factory =
+		// GLDrawableFactory.getFactory(GLProfile.get(GLProfile.GL4bc));
+		// final AbstractGraphicsDevice device =
+		// GLSharedContextInstance.getInstance().getGLSharedAutoDrawable()
+		// .getNativeSurface().getGraphicsConfiguration().getScreen().getDevice();
+		// GLCapabilitiesImmutable caps =
+		// GLSharedContextInstance.getInstance().getGLCapabilities();
+		// final GLDrawable drawable = factory.createDummyDrawable(device, true,
+		// caps, null);
+		// drawable.setRealized(true);
+		// GLContext sharedContext = drawable
+		// .createContext(GLSharedContextInstance.getInstance().getGLSharedAutoDrawable().getContext());
+		// sharedContext.makeCurrent();
+
+		GLContext sharedContext = GLSharedContextInstance.getInstance().getGLSharedContext();
 		sharedContext.makeCurrent();
 
 		int histox = viewModel.getHistoXSize();
