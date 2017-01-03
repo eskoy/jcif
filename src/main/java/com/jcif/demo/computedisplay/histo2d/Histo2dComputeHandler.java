@@ -1,4 +1,4 @@
-package com.jcif.demo.application;
+package com.jcif.demo.computedisplay.histo2d;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -33,13 +33,10 @@ public class Histo2dComputeHandler {
 
 	public void filterPoint(ByteBuffer[] bb, float x, float y, float size) {
 		FloatBuffer xy = bb[0].asFloatBuffer();
-
 		FloatBuffer color = bb[1].asFloatBuffer();
 
 		float minx = x - size;
-
 		float maxx = x + size;
-
 		float miny = y - size;
 		float maxy = y + size;
 

@@ -12,28 +12,15 @@ import com.jcif.opengl.GLBufferFactory.GL_TYPE;
 import com.jcif.opengl.GLBufferFactory.GL_USAGE;
 import com.jcif.opengl.GLSharedContextInstance;
 import com.jcif.opengl.glcompute.filter.GlComputeFilter2d;
-import com.jogamp.nativewindow.AbstractGraphicsDevice;
 import com.jogamp.opengl.GL4;
-import com.jogamp.opengl.GLCapabilitiesImmutable;
 import com.jogamp.opengl.GLContext;
-import com.jogamp.opengl.GLDrawable;
-import com.jogamp.opengl.GLDrawableFactory;
-import com.jogamp.opengl.GLProfile;
 
 public class Filter2dDemo {
 
 	public static void main(String[] args) {
-		final GLDrawableFactory factory = GLDrawableFactory.getFactory(GLProfile.get(GLProfile.GL4bc));
-		final AbstractGraphicsDevice device = GLSharedContextInstance.getInstance().getGLSharedAutoDrawable()
-				.getNativeSurface().getGraphicsConfiguration().getScreen().getDevice();
-		GLCapabilitiesImmutable caps = GLSharedContextInstance.getInstance().getGLCapabilities();
-
-		final GLDrawable drawable = factory.createDummyDrawable(device, true, caps, null);
-		drawable.setRealized(true);
-		GLContext sharedContext = drawable
-				.createContext(GLSharedContextInstance.getInstance().getGLSharedAutoDrawable().getContext());
-
+		GLContext sharedContext = GLSharedContextInstance.getInstance().getGLSharedContext();
 		sharedContext.makeCurrent();
+
 		GL4 gl = sharedContext.getGL().getGL4();
 
 		GlComputeFilter2d computeHandler = new GlComputeFilter2d(gl);
@@ -82,9 +69,6 @@ public class Filter2dDemo {
 
 		time = System.currentTimeMillis() - time;
 		System.err.println("elpased time in ms   :" + time);
-
-		while (true) {
-		}
 
 	}
 

@@ -35,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jcif.awt.CallBack;
-import com.jcif.demo.application.Histo2dComputeHandler;
 import com.jcif.demo.computedisplay.histo2d.control.ControlPanel;
 import com.jcif.demo.computedisplay.histo2d.control.histo2d.DataView;
 import com.jcif.demo.computedisplay.histo2d.source.SourceCtrl;
