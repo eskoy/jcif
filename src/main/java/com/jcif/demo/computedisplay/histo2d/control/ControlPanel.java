@@ -44,21 +44,21 @@ public class ControlPanel implements View {
 		JPanel panel = new JPanel();
 
 		// Turn on labels at major tick marks.
-		histoBinXSlider.setBorder(new TitledBorder("Bin X value:"));
+		histoBinXSlider.setBorder(new TitledBorder("Bin X :"));
 		histoBinXSlider.setMajorTickSpacing(25);
 		histoBinXSlider.setMinorTickSpacing(10);
 		histoBinXSlider.setPaintTicks(true);
 		histoBinXSlider.setPaintLabels(true);
 
 		// Turn on labels at major tick marks.
-		histoBinYSlider.setBorder(new TitledBorder("Bin Y value:"));
+		histoBinYSlider.setBorder(new TitledBorder("Bin Y :"));
 		histoBinYSlider.setMajorTickSpacing(25);
 		histoBinYSlider.setMinorTickSpacing(10);
 		histoBinYSlider.setPaintTicks(true);
 		histoBinYSlider.setPaintLabels(true);
 
 		// Turn on labels at major tick marks.
-		histoSizeSlider.setBorder(new TitledBorder("Size value:"));
+		histoSizeSlider.setBorder(new TitledBorder("Size :"));
 		histoSizeSlider.setMajorTickSpacing(5);
 		histoSizeSlider.setMinorTickSpacing(1);
 		histoSizeSlider.setPaintTicks(true);

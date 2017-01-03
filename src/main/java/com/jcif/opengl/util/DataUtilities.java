@@ -10,7 +10,7 @@ public class DataUtilities {
 
 	public enum DATA_TYPE {
 
-		WHITE_NOISE, LINEAR, MODULO, COSINUS;
+		WHITE_NOISE, LINEAR, MODULO, COSINUS, SINUS;
 
 	}
 
@@ -35,7 +35,11 @@ public class DataUtilities {
 
 		case MODULO:
 			for (int i = 0; i < nb; i++) {
-				floatbuffervalues.put(i, (i % param[0]) * 1f / param[0]);
+				int modulo = 10;
+				if (param.length != 0)
+					modulo = param[0];
+
+				floatbuffervalues.put(i, (i % modulo) * 1f / modulo);
 			}
 			break;
 		case COSINUS:
@@ -44,13 +48,16 @@ public class DataUtilities {
 			}
 			break;
 
+		case SINUS:
+			for (int i = 0; i < nb; i++) {
+				floatbuffervalues.put(i, ((float) Math.sin((i * (2 * Math.PI)) / nb) + 1) / 2);
+			}
+			break;
+
 		default:
 			break;
 		}
 
-//		for (int i = 0; i < nb; i++) {
-//			System.err.println(floatbuffervalues.get(i));
-//		}
 		return bb;
 	}
 

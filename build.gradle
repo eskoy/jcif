@@ -10,7 +10,7 @@ configurations {
 
 
 
-mainClassName = "com.jcif.demo.application.Main"
+mainClassName = "com.jcif.demo.computedisplay.histo2d.Histo2dMain"
 			
 
 repositories {

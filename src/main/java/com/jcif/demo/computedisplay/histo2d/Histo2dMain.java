@@ -105,20 +105,6 @@ public class Histo2dMain implements CallBack {
 
 	public ByteBuffer[] computeHisto2d() {
 
-		// final GLDrawableFactory factory =
-		// GLDrawableFactory.getFactory(GLProfile.get(GLProfile.GL4bc));
-		// final AbstractGraphicsDevice device =
-		// GLSharedContextInstance.getInstance().getGLSharedAutoDrawable()
-		// .getNativeSurface().getGraphicsConfiguration().getScreen().getDevice();
-		// GLCapabilitiesImmutable caps =
-		// GLSharedContextInstance.getInstance().getGLCapabilities();
-		// final GLDrawable drawable = factory.createDummyDrawable(device, true,
-		// caps, null);
-		// drawable.setRealized(true);
-		// GLContext sharedContext = drawable
-		// .createContext(GLSharedContextInstance.getInstance().getGLSharedAutoDrawable().getContext());
-		// sharedContext.makeCurrent();
-
 		GLContext sharedContext = GLSharedContextInstance.getInstance().getGLSharedContext();
 		sharedContext.makeCurrent();
 
@@ -432,7 +418,7 @@ public class Histo2dMain implements CallBack {
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(() -> {
-			final JFrame jframe = new JFrame("Histo compute shader press space bar !!!!!!");
+			final JFrame jframe = new JFrame("Histo compute shader use control panel to display it !!!!!!");
 			jframe.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosing(WindowEvent windowevent) {
