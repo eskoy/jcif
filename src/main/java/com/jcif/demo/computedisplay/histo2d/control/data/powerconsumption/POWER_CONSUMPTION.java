@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay.histo2d.source.model;
+package com.jcif.demo.computedisplay.histo2d.control.data.powerconsumption;
 
 import com.jcif.structure.model.DISPLAY;
 import com.jcif.structure.model.ENCODING;
@@ -6,12 +6,12 @@ import com.jcif.structure.model.MemberBinaryDefinition;
 import com.jcif.structure.model.MemberMemoryDefinition;
 import com.jcif.structure.model.StructureMember;
 
-public enum Household_power_consumption_definition implements StructureMember {
+public enum POWER_CONSUMPTION implements StructureMember {
 
-	@MemberBinaryDefinition(display = DISPLAY.DATE, encoding = ENCODING.STRING, ordinal = 0)
+	@MemberBinaryDefinition(display = DISPLAY.DATE, encoding = ENCODING.STRING, pattern = "dd/MM/yyyy", ordinal = 0)
 	@MemberMemoryDefinition(display = DISPLAY.DATE, encoding = ENCODING.FLOAT, ordinal = 0, structureSize = 288)
 	Date, //
-	@MemberBinaryDefinition(display = DISPLAY.TIME, encoding = ENCODING.STRING, ordinal = 1)
+	@MemberBinaryDefinition(display = DISPLAY.TIME, encoding = ENCODING.STRING, pattern = "HH:mm:ss", ordinal = 1)
 	@MemberMemoryDefinition(display = DISPLAY.TIME, encoding = ENCODING.FLOAT, ordinal = 1, structureSize = 288)
 	Time, //
 	@MemberBinaryDefinition(display = DISPLAY.NUMBER, encoding = ENCODING.STRING, ordinal = 2)

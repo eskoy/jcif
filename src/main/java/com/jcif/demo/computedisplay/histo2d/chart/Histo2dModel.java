@@ -1,8 +1,18 @@
-package com.jcif.demo.computedisplay.histo2d.control.histo2d;
+package com.jcif.demo.computedisplay.histo2d.chart;
 
 import java.nio.ByteBuffer;
 
-public class DataView {
+public class Histo2dModel {
+
+	protected float pointSize = 3f;
+
+	public float getPointSize() {
+		return pointSize;
+	}
+
+	public void setPointSize(float pointSize) {
+		this.pointSize = pointSize;
+	}
 
 	protected int histoXSize = 0;
 

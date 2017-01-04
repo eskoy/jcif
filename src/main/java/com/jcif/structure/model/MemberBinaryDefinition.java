@@ -12,4 +12,6 @@ public @interface MemberBinaryDefinition {
 
 	int ordinal();
 
+	String pattern() default "";
+
 }

@@ -29,6 +29,7 @@ dependencies {
     compile "org.jogamp.jogl:jogl-all:2.3.2"
     compile "org.slf4j:slf4j-simple:1.7.21"
     compile "org.nocrala:shapefilereader:1.0"
+    compile "tablelayout:TableLayout:20050920"
 
     runtime "org.jogamp.gluegen:gluegen-rt:2.3.2:natives-android-aarch64"
     runtime "org.jogamp.gluegen:gluegen-rt:2.3.2:natives-android-armv6"

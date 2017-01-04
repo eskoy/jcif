@@ -9,9 +9,9 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 
-import com.jcif.awt.View;
+import com.jcif.awt.ViewProvider;
 
-public class ControlPanel implements View {
+public class ControlView implements ViewProvider {
 
 	protected JPanel view = new JPanel();
 
@@ -35,7 +35,7 @@ public class ControlPanel implements View {
 
 	protected JSlider histoSizeSlider = new JSlider(JSlider.HORIZONTAL, 1, 20, 3);
 
-	public ControlPanel() {
+	public ControlView() {
 
 		initLayout();
 	}
@@ -85,9 +85,9 @@ public class ControlPanel implements View {
 
 	}
 
-	public void add(int index, String name, View view) {
-		tabpane.insertTab(name, null, view.getView(), name, index);
-
+	public void insertTab(int index, Component view) {
+		tabpane.insertTab(view.getName(), null, view, view.getName(), index);
+		tabpane.setSelectedIndex(index);
 	}
 
 	public JButton getHistoBrushButton() {

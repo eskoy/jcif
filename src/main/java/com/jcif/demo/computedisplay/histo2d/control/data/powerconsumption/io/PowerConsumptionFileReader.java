@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay.histo2d.source.model.io;
+package com.jcif.demo.computedisplay.histo2d.control.data.powerconsumption.io;
 
 import java.io.BufferedReader;
 import java.nio.charset.Charset;
@@ -9,11 +9,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 
-import com.jcif.demo.computedisplay.histo2d.source.model.Household_power_consumption_definition;
+import com.jcif.demo.computedisplay.histo2d.control.data.powerconsumption.POWER_CONSUMPTION;
 import com.jcif.structure.model.StructureDataset;
 import com.jcif.structure.model.StructureDatasets;
 
-public class Household_power_consumption_reader {
+public class PowerConsumptionFileReader {
 
 	public final StructureDataset read(String path, int numberOfrecord) {
 
@@ -33,17 +33,19 @@ public class Household_power_consumption_reader {
 			int size = numberOfrecord; // dont count definition
 			int index = 0;
 			ds = StructureDatasets.newArrayOfStructureDatasetImpl(size,
-					Household_power_consumption_definition.values());
-			Household_power_consumption_definition[] numbervalues = {
-					Household_power_consumption_definition.Global_intensity,
-					Household_power_consumption_definition.Global_active_power,
-					Household_power_consumption_definition.Global_reactive_power,
-					Household_power_consumption_definition.Sub_metering_1,
-					Household_power_consumption_definition.Sub_metering_2,
-					Household_power_consumption_definition.Sub_metering_3 };
+					POWER_CONSUMPTION.values());
+			POWER_CONSUMPTION[] numbervalues = {
+					POWER_CONSUMPTION.Global_intensity,
+					POWER_CONSUMPTION.Global_active_power,
+					POWER_CONSUMPTION.Global_reactive_power,
+					POWER_CONSUMPTION.Sub_metering_1,
+					POWER_CONSUMPTION.Sub_metering_2,
+					POWER_CONSUMPTION.Sub_metering_3 };
 
-			SimpleDateFormat parserDate = new SimpleDateFormat("dd/MM/yyyy");
-			SimpleDateFormat parserTime = new SimpleDateFormat("HH:mm:ss");
+			SimpleDateFormat parserDate = new SimpleDateFormat(
+					POWER_CONSUMPTION.Date.getBinaryDefinition().pattern());
+			SimpleDateFormat parserTime = new SimpleDateFormat(
+					POWER_CONSUMPTION.Time.getBinaryDefinition().pattern());
 
 			// skip first line
 			readBuffer.readLine();
@@ -52,14 +54,14 @@ public class Household_power_consumption_reader {
 				if (!line.contains("?")) {
 					String[] record = line.split(";");
 
-					float date = parserDate.parse(record[Household_power_consumption_definition.Date.ordinal()])
+					float date = parserDate.parse(record[POWER_CONSUMPTION.Date.ordinal()])
 							.getTime();
-					ds.setValue(Household_power_consumption_definition.Date, index, date);
+					ds.setValue(POWER_CONSUMPTION.Date, index, date);
 
-					float time = parserTime.parse(record[Household_power_consumption_definition.Time.ordinal()])
+					float time = parserTime.parse(record[POWER_CONSUMPTION.Time.ordinal()])
 							.getTime();
-					ds.setValue(Household_power_consumption_definition.Time, index, time);
-					for (Household_power_consumption_definition member : numbervalues) {
+					ds.setValue(POWER_CONSUMPTION.Time, index, time);
+					for (POWER_CONSUMPTION member : numbervalues) {
 						ds.setValue(member, index, Float.parseFloat(record[member.ordinal()]));
 					}
 

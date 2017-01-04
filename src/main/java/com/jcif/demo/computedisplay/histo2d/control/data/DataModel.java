@@ -1,8 +1,8 @@
-package com.jcif.demo.computedisplay.histo2d.source;
+package com.jcif.demo.computedisplay.histo2d.control.data;
 
 import com.jcif.opengl.GLBuffer;
 
-public class SourceModel {
+public class DataModel {
 
 	private int dataNumber;
 
@@ -44,7 +44,7 @@ public class SourceModel {
 		this.gpuValueY = gpuValueY;
 	}
 
-	public SourceModel() {
+	public DataModel() {
 	}
 
 }

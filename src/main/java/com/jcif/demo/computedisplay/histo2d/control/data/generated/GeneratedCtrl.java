@@ -1,10 +1,12 @@
-package com.jcif.demo.computedisplay.histo2d.source;
+package com.jcif.demo.computedisplay.histo2d.control.data.generated;
 
+import java.awt.Component;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import com.jcif.awt.CallBack;
-import com.jcif.demo.computedisplay.histo2d.source.view.SourcePanel;
+import com.jcif.awt.ViewProvider;
+import com.jcif.demo.computedisplay.histo2d.control.data.DataModel;
 import com.jcif.opengl.GLBufferFactory;
 import com.jcif.opengl.GLSharedContextInstance;
 import com.jcif.opengl.util.DataUtilities;
@@ -12,41 +14,43 @@ import com.jcif.opengl.util.DataUtilities.DATA_TYPE;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLContext;
 
-public class SourceCtrl {
+public class GeneratedCtrl implements ViewProvider, CallBack {
 
 	protected CallBack callBack;
 
-	protected SourceModel sourceModel = new SourceModel();
+	protected DataModel sourceModel;
 
-	protected SourcePanel sourceView = new SourcePanel();
+	protected GeneratedView generatedView = new GeneratedView();
 
-	public SourcePanel getView() {
-		return sourceView;
+	@Override
+	public Component getView() {
+		return generatedView.getView();
 	}
 
-	public SourceCtrl(CallBack cb) {
+	public GeneratedCtrl(CallBack cb, DataModel model) {
 		callBack = cb;
-
-		sourceView.getDatanumberSlider().addChangeListener(e -> {
-			if (!sourceView.getDatanumberSlider().getValueIsAdjusting()) {
-				modelToview();
+		sourceModel = model;
+		generatedView.getDatanumberSlider().addChangeListener(e -> {
+			if (!generatedView.getDatanumberSlider().getValueIsAdjusting()) {
+				modelToView();
 			}
 
 		});
-		sourceView.getDataXtype().addActionListener(e -> {
-			modelToview();
+		generatedView.getDataXtype().addActionListener(e -> {
+			modelToView();
 		});
 
-		sourceView.getDataYtype().addActionListener(e -> {
-			modelToview();
+		generatedView.getDataYtype().addActionListener(e -> {
+			modelToView();
 		});
 	}
 
-	public void modelToview() {
+	@Override
+	public void modelToView() {
 
-		int numbervalue = sourceView.getDatanumberSlider().getValue();
-		DATA_TYPE xtype = (DATA_TYPE) sourceView.getDataXtype().getSelectedItem();
-		DATA_TYPE ytype = (DATA_TYPE) sourceView.getDataYtype().getSelectedItem();
+		int numbervalue = generatedView.getDatanumberSlider().getValue();
+		DATA_TYPE xtype = (DATA_TYPE) generatedView.getDataXtype().getSelectedItem();
+		DATA_TYPE ytype = (DATA_TYPE) generatedView.getDataYtype().getSelectedItem();
 		GLContext sharedContext = GLSharedContextInstance.getInstance().getGLSharedContext();
 		sharedContext.makeCurrent();
 		computeNewData(numbervalue * 1000000, xtype, ytype, sharedContext.getGL().getGL4());
@@ -72,7 +76,7 @@ public class SourceCtrl {
 
 	}
 
-	public SourceModel getModel() {
+	public DataModel getModel() {
 		return sourceModel;
 	}
 
@@ -90,4 +94,5 @@ public class SourceCtrl {
 
 		return bb;
 	}
+
 }

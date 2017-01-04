@@ -2,7 +2,7 @@ package com.jcif.awt;
 
 import java.awt.Component;
 
-public interface View {
+public interface ViewProvider {
 
 	Component getView();
 
