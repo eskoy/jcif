@@ -9,6 +9,7 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 
+import com.jcif.awt.JFXColorPickerCtrl;
 import com.jcif.awt.ViewProvider;
 
 public class ControlView implements ViewProvider {
@@ -26,6 +27,8 @@ public class ControlView implements ViewProvider {
 	public int getBINS_INIT() {
 		return BINS_INIT;
 	}
+
+	protected JFXColorPickerCtrl colorPicker = new JFXColorPickerCtrl();
 
 	protected JButton histoBrushButton = new JButton("Start histo brush ");
 
@@ -64,7 +67,8 @@ public class ControlView implements ViewProvider {
 		histoSizeSlider.setPaintTicks(true);
 		histoSizeSlider.setPaintLabels(true);
 
-		panel.setLayout(new GridLayout(4, 1));
+		panel.setLayout(new GridLayout(5, 1));
+		panel.add(colorPicker.getView());
 		panel.add(histoBrushButton);
 		panel.add(histoBinXSlider);
 		panel.add(histoBinYSlider);
@@ -81,7 +85,7 @@ public class ControlView implements ViewProvider {
 		view.setLayout(new GridLayout(1, 1));
 		tabpane = new JTabbedPane();
 		view.add(tabpane);
-		tabpane.add("Histogram", buildHistoPanel());
+		tabpane.add("Histo2d Data Reduction", buildHistoPanel());
 
 	}
 

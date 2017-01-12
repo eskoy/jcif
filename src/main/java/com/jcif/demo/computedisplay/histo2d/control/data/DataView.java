@@ -17,7 +17,7 @@ public class DataView implements ViewProvider {
 	public DataView() {
 
 		view = buildView();
-		view.setName("Data");
+		view.setName("Data Source");
 	}
 
 	public JComboBox<String> getDatasourcecombobox() {

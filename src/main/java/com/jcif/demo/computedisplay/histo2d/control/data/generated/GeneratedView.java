@@ -53,7 +53,7 @@ public class GeneratedView implements ViewProvider {
 
 	JPanel buildDataPanel() {
 
-		datanumberSlider.setBorder(new TitledBorder("Data number:"));
+		datanumberSlider.setBorder(new TitledBorder("Data number in million:"));
 		datanumberSlider.setMajorTickSpacing(5);
 		datanumberSlider.setMinorTickSpacing(1);
 		datanumberSlider.setPaintTicks(true);

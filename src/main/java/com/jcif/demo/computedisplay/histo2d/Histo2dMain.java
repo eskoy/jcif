@@ -16,6 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
@@ -33,21 +35,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jcif.awt.CallBack;
+import com.jcif.awt.ColorUtil;
 import com.jcif.demo.computedisplay.histo2d.chart.Histo2dModel;
 import com.jcif.demo.computedisplay.histo2d.control.ControlCtrl;
 import com.jcif.demo.computedisplay.histo2d.control.data.DataModel;
+import com.jcif.demo.geo.PolyUtil;
+import com.jcif.demo.geo.polyline.PolylineShapeFileUtil;
 import com.jcif.opengl.GLBufferFactory;
+import com.jcif.opengl.GLPainter;
 import com.jcif.opengl.GLSharedContextInstance;
 import com.jcif.opengl.glpainter.grid.Grid;
 import com.jcif.opengl.glpainter.grid.GridPainter;
 import com.jcif.opengl.glpainter.histo.Histo2d;
 import com.jcif.opengl.glpainter.histo.Histo2dPainter;
+import com.jcif.opengl.glpainter.poly.Poly;
+import com.jcif.opengl.glpainter.poly.PolyLinePainter;
 import com.jcif.opengl.windowtoolkit.GLPainterController;
 import com.jcif.opengl.windowtoolkit.WindowToolkitFactory;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.awt.GLCanvas;
 
 public class Histo2dMain implements CallBack {
+
+	public static String MAP_FILE_PATH = "10m_coastline.shp";
 
 	private final static Logger logger = LoggerFactory.getLogger(Histo2dMain.class);
 
@@ -60,6 +70,8 @@ public class Histo2dMain implements CallBack {
 	protected Histo2dPainter histo2dPainter = new Histo2dPainter();
 
 	protected Histo2dPainter mousePainter = new Histo2dPainter();
+
+	protected GLPainter<?> worldcoaslinepainter;
 
 	protected Histo2d mouseData = new Histo2d();
 
@@ -116,6 +128,32 @@ public class Histo2dMain implements CallBack {
 		sharedContext.release();
 
 		return data;
+	}
+
+	protected GLPainter<?> createWorldCoaslineLayer() {
+
+		List<ByteBuffer> polygonBuffer = new ArrayList<>();
+		List<Poly> polygonList = new ArrayList<>();
+		PolylineShapeFileUtil.loadPolygon(polygonBuffer, MAP_FILE_PATH);
+
+		PolyUtil.normalize(polygonBuffer);
+
+		int paletteSize = 2;
+		Color[] color = ColorUtil.computeRandomColor(paletteSize);
+
+		int i = 0;
+		for (ByteBuffer current : polygonBuffer) {
+			Poly poly = new Poly();
+			poly.setColor(color[i++ % paletteSize]);
+			poly.setSize(poly.getSize());
+			poly.setPolygon(current);
+			polygonList.add(poly);
+		}
+
+		PolyLinePainter painter = new PolyLinePainter();
+		painter.update(polygonList);
+
+		return painter;
 	}
 
 	protected void laf() {
@@ -209,12 +247,14 @@ public class Histo2dMain implements CallBack {
 		histo2dComputeHandler = new Histo2dComputeHandler(sharedContext.getGL().getGL4());
 		sharedContext.release();
 
+		worldcoaslinepainter = createWorldCoaslineLayer();
 		// compose opengl layer
 
 		gLPainterController.getBackGround().setColor(Color.WHITE);
 		gLPainterController.setSharedContext(sharedContext);
-		gLPainterController.addPainter(histo2dPainter);
+		gLPainterController.addPainter(worldcoaslinepainter);
 		gLPainterController.addPainter(gridPainter);
+		gLPainterController.addPainter(histo2dPainter);
 		gLPainterController.addPainter(mousePainter);
 
 		// construct main view

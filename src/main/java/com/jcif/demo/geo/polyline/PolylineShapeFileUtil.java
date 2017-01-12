@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.nocrala.tools.gis.data.esri.shapefile.ShapeFileReader;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
-import org.nocrala.tools.gis.data.esri.shapefile.header.ShapeFileHeader;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.AbstractShape;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolylineShape;
@@ -25,8 +24,9 @@ public class PolylineShapeFileUtil {
 			prefs.setMaxNumberOfPointsPerShape(16650);
 			ShapeFileReader r = new ShapeFileReader(is, prefs);
 
-			ShapeFileHeader h = r.getHeader();
-			System.out.println("The shape type of this files is " + h.getShapeType());
+			// ShapeFileHeader h = r.getHeader();
+			// System.out.println("The shape type of this files is " +
+			// h.getShapeType());
 
 			AbstractShape s;
 			while ((s = r.next()) != null) {
