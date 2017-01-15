@@ -4,9 +4,9 @@ import java.awt.Component;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import com.jcif.awt.CallBack;
-import com.jcif.awt.ViewProvider;
 import com.jcif.demo.computedisplay.histo2d.control.data.DataModel;
+import com.jcif.mvc.MtoVCallBack;
+import com.jcif.mvc.ViewProvider;
 import com.jcif.opengl.GLBufferFactory;
 import com.jcif.opengl.GLSharedContextInstance;
 import com.jcif.opengl.util.DataUtilities;
@@ -14,9 +14,9 @@ import com.jcif.opengl.util.DataUtilities.DATA_TYPE;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLContext;
 
-public class GeneratedCtrl implements ViewProvider, CallBack {
+public class GeneratedCtrl implements ViewProvider, MtoVCallBack {
 
-	protected CallBack callBack;
+	protected MtoVCallBack callBack;
 
 	protected DataModel sourceModel;
 
@@ -27,7 +27,7 @@ public class GeneratedCtrl implements ViewProvider, CallBack {
 		return generatedView.getView();
 	}
 
-	public GeneratedCtrl(CallBack cb, DataModel model) {
+	public GeneratedCtrl(MtoVCallBack cb, DataModel model) {
 		callBack = cb;
 		sourceModel = model;
 		generatedView.getDatanumberSlider().addChangeListener(e -> {

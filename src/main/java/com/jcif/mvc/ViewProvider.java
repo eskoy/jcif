@@ -1,4 +1,4 @@
-package com.jcif.awt;
+package com.jcif.mvc;
 
 import java.awt.Component;
 

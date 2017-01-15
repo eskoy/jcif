@@ -1,4 +1,4 @@
-package com.jcif.demo.computedisplay.histo2d.chart;
+package com.jcif.demo.computedisplay.histo2d.chart.histo2d;
 
 import java.nio.ByteBuffer;
 

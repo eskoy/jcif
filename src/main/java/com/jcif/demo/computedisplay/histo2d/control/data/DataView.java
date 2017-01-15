@@ -7,7 +7,7 @@ import java.awt.Component;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import com.jcif.awt.ViewProvider;
+import com.jcif.mvc.ViewProvider;
 
 public class DataView implements ViewProvider {
 	protected JPanel view;

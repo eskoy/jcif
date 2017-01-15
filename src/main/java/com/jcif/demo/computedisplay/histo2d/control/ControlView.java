@@ -4,13 +4,15 @@ import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 
 import com.jcif.awt.JFXColorPickerCtrl;
-import com.jcif.awt.ViewProvider;
+import com.jcif.awt.JPopup;
+import com.jcif.mvc.ViewProvider;
 
 public class ControlView implements ViewProvider {
 
@@ -30,6 +32,8 @@ public class ControlView implements ViewProvider {
 
 	protected JFXColorPickerCtrl colorPicker = new JFXColorPickerCtrl();
 
+	protected JButton button = new JButton("TEST POPUP");
+
 	protected JButton histoBrushButton = new JButton("Start histo brush ");
 
 	protected JSlider histoBinXSlider = new JSlider(JSlider.HORIZONTAL, BINS_MIN, BINS_MAX, BINS_INIT);
@@ -41,6 +45,19 @@ public class ControlView implements ViewProvider {
 	public ControlView() {
 
 		initLayout();
+	}
+
+	JComponent createFAKEPANEL() {
+
+		JTabbedPane tabpane = new JTabbedPane();
+		tabpane.add("essai1", new JPanel());
+		tabpane.add("essai2", new JPanel());
+		tabpane.add("essai3", new JPanel());
+		tabpane.add("essai4", new JPanel());
+
+		tabpane.setSize(300, 300);
+		tabpane.setPreferredSize(tabpane.getSize());
+		return tabpane;
 	}
 
 	JPanel buildHistoPanel() {
@@ -67,8 +84,16 @@ public class ControlView implements ViewProvider {
 		histoSizeSlider.setPaintTicks(true);
 		histoSizeSlider.setPaintLabels(true);
 
-		panel.setLayout(new GridLayout(5, 1));
+		JPopup pop = new JPopup(createFAKEPANEL());
+
+		button.addActionListener(e -> {
+			pop.setLocationRelativeTo(button);
+			pop.setVisible(true);
+		});
+
+		panel.setLayout(new GridLayout(6, 1));
 		panel.add(colorPicker.getView());
+		panel.add(button);
 		panel.add(histoBrushButton);
 		panel.add(histoBinXSlider);
 		panel.add(histoBinYSlider);

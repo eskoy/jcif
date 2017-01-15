@@ -1,16 +1,19 @@
 package com.jcif.demo.computedisplay.histo2d.control;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.jcif.awt.CallBack;
-import com.jcif.awt.ViewProvider;
-import com.jcif.demo.computedisplay.histo2d.chart.Histo2dModel;
+import com.jcif.demo.computedisplay.histo2d.chart.ChartCallback;
+import com.jcif.demo.computedisplay.histo2d.chart.histo2d.Histo2dModel;
 import com.jcif.demo.computedisplay.histo2d.control.data.DataCtrl;
 import com.jcif.demo.computedisplay.histo2d.control.data.DataModel;
+import com.jcif.mvc.MtoVCallBack;
+import com.jcif.mvc.ViewProvider;
 
 public class ControlCtrl implements ViewProvider {
 
@@ -22,16 +25,16 @@ public class ControlCtrl implements ViewProvider {
 
 	protected DataCtrl dataCtrl;
 
-	protected CallBack callBack;
+	protected MtoVCallBack callBack;
 
 	@Override
 	public Component getView() {
 		return controlView.getView();
 	}
 
-	public ControlCtrl(CallBack cb, Histo2dModel model, DataModel dataModel) {
+	public ControlCtrl(ChartCallback cb, DataModel dataModel) {
 		// init source
-		histo2dModel = model;
+		histo2dModel = cb.getHistoModel();
 		callBack = cb;
 		dataCtrl = new DataCtrl(callBack, dataModel);
 		insert(0, dataCtrl.getView());
@@ -73,6 +76,15 @@ public class ControlCtrl implements ViewProvider {
 
 					modelToview();
 				}
+			}
+		});
+
+		controlView.getHistoBrushButton().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				cb.startBrushOnView();
 			}
 		});
 

@@ -4,6 +4,8 @@ import java.awt.Component;
 
 import javax.swing.JFrame;
 
+import com.jcif.mvc.ViewProvider;
+
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
