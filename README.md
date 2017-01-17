@@ -2,6 +2,10 @@
 Java Computing Intensive Function
 
 
+Main demo 
+
+![alt text](https://github.com/eskoy/jcif/blob/master/doc/demo.png "Logo Title Text 1")
+
 Works with 
 
 modern opengl
