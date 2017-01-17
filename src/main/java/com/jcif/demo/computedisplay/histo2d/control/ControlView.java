@@ -22,7 +22,7 @@ public class ControlView implements ViewProvider {
 
 	int BINS_MIN = 5;
 
-	int BINS_MAX = 250;
+	int BINS_MAX = 360;
 
 	int BINS_INIT = 50;
 
@@ -65,15 +65,15 @@ public class ControlView implements ViewProvider {
 
 		// Turn on labels at major tick marks.
 		histoBinXSlider.setBorder(new TitledBorder("Bin X :"));
-		histoBinXSlider.setMajorTickSpacing(25);
-		histoBinXSlider.setMinorTickSpacing(10);
+		histoBinXSlider.setMajorTickSpacing(60);
+		histoBinXSlider.setMinorTickSpacing(20);
 		histoBinXSlider.setPaintTicks(true);
 		histoBinXSlider.setPaintLabels(true);
 
 		// Turn on labels at major tick marks.
 		histoBinYSlider.setBorder(new TitledBorder("Bin Y :"));
-		histoBinYSlider.setMajorTickSpacing(25);
-		histoBinYSlider.setMinorTickSpacing(10);
+		histoBinYSlider.setMajorTickSpacing(60);
+		histoBinYSlider.setMinorTickSpacing(20);
 		histoBinYSlider.setPaintTicks(true);
 		histoBinYSlider.setPaintLabels(true);
 

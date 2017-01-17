@@ -3,24 +3,20 @@ package com.jcif.demo.computedisplay.histo2d.chart.histo2d;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.concurrent.ExecutionException;
 
-import javax.swing.SwingWorker;
 import javax.swing.SwingWorker.StateValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jcif.demo.computedisplay.histo2d.Histo2dComputeHandler;
 import com.jcif.demo.computedisplay.histo2d.control.data.DataModel;
-import com.jcif.mvc.MtoVCallBack;
 import com.jcif.opengl.GLBufferFactory;
 import com.jcif.opengl.GLSharedContextInstance;
 import com.jcif.opengl.glpainter.histo.Histo2d;
 import com.jcif.opengl.glpainter.histo.Histo2dPainter;
 import com.jogamp.opengl.GLContext;
 
-public class Histo2dCtrl implements MtoVCallBack {
+public class Histo2dCtrl {
 
 	protected StateValue updatestateValue;
 
@@ -116,44 +112,10 @@ public class Histo2dCtrl implements MtoVCallBack {
 
 	}
 
-	@Override
-	public void modelToView() {
+	public void reduceModel() {
 
-		final long time = System.currentTimeMillis();
-		if (updatestateValue == null || updatestateValue == StateValue.DONE) {
-			SwingWorker<ByteBuffer[], Void> worker = new SwingWorker<ByteBuffer[], Void>() {
-				@Override
-				public ByteBuffer[] doInBackground() {
-
-					return computeHisto2d();
-				}
-
-				@Override
-				public void done() {
-
-					try {
-						histoModel.setHistoBuffer(get());
-						updateHisto2dPainter(histoModel);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					long newtime = System.currentTimeMillis() - time;
-					System.err.println(
-							"Time to compute & diplay histo is in ms " + newtime + " " + Thread.currentThread());
-					updatestateValue = this.getState();
-
-				}
-			};
-
-			worker.execute();
-
-		}
-
+		histoModel.setHistoBuffer(computeHisto2d());
+		updateHisto2dPainter(histoModel);
 	}
 
 	public void mouseMoved(float x, float y) {

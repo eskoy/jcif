@@ -51,6 +51,7 @@ public class GeneratedCtrl implements ViewProvider, MtoVCallBack {
 		int numbervalue = generatedView.getDatanumberSlider().getValue();
 		DATA_TYPE xtype = (DATA_TYPE) generatedView.getDataXtype().getSelectedItem();
 		DATA_TYPE ytype = (DATA_TYPE) generatedView.getDataYtype().getSelectedItem();
+		// compute new data and upload to gpu
 		GLContext sharedContext = GLSharedContextInstance.getInstance().getGLSharedContext();
 		sharedContext.makeCurrent();
 		computeNewData(numbervalue * 1000000, xtype, ytype, sharedContext.getGL().getGL4());
@@ -64,6 +65,7 @@ public class GeneratedCtrl implements ViewProvider, MtoVCallBack {
 
 		if (sourceModel.getGpuValueX() != null)
 			sourceModel.getGpuValueX().release(gl);
+
 		sourceModel.setGpuValueX(GLBufferFactory.hostoGpuData(DataUtilities.createNewData1d(size, x), gl));
 
 		if (sourceModel.getGpuValueY() != null)

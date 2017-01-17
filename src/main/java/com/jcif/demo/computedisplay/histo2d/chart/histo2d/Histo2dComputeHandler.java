@@ -1,9 +1,8 @@
-package com.jcif.demo.computedisplay.histo2d;
+package com.jcif.demo.computedisplay.histo2d.chart.histo2d;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Random;
 
 import com.jcif.opengl.GLBuffer;
 import com.jcif.opengl.GLBufferFactory;
@@ -113,57 +112,6 @@ public class Histo2dComputeHandler {
 			}
 		}
 		return new ByteBuffer[] { bb, bbColor, bbcount };
-	}
-
-	public static ByteBuffer createNewData(int nb) {
-
-		ByteBuffer bb = GLBufferFactory.allocate(nb * Float.BYTES);
-		FloatBuffer floatbuffervalues = bb.asFloatBuffer();
-
-		Random rnd = new Random();
-		for (int i = 0; i < nb; i++) {
-			// ID
-			floatbuffervalues.put(i, rnd.nextFloat());
-			// X
-
-		}
-
-		return bb;
-	}
-
-	public static ByteBuffer createIndices(int nb) {
-
-		ByteBuffer bb = GLBufferFactory.allocate(nb * Integer.BYTES);
-		IntBuffer floatbuffervalues = bb.asIntBuffer();
-
-		for (int i = 0; i < nb; i++) {
-			// ID
-			floatbuffervalues.put(i, i);
-			// X
-
-		}
-
-		return bb;
-	}
-
-	public static ByteBuffer updateIndices(int nb, int value) {
-
-		ByteBuffer bb = GLBufferFactory.allocate(nb * Integer.BYTES);
-		IntBuffer floatbuffervalues = bb.asIntBuffer();
-
-		Random rand = new Random();
-
-		int test = rand.nextInt(nb);
-
-		for (int i = 0; i < nb; i++) {
-			// ID
-
-			floatbuffervalues.put(i, value);
-			// X
-
-		}
-
-		return bb;
 	}
 
 }

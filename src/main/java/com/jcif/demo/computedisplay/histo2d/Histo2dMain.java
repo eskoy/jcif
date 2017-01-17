@@ -77,9 +77,10 @@ public class Histo2dMain {
 
 		JScrollPane controlPane = new JScrollPane(controlCtrl.getView());
 		JScrollPane histoPane = new JScrollPane(chartCtrl.getView());
+		histoPane.setAutoscrolls(false);
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPane, histoPane);
-		splitPane.setOneTouchExpandable(true);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPane, chartCtrl.getView());
+		// splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(280);
 
 		// Provide minimum sizes for the two components in the split pane
@@ -97,7 +98,8 @@ public class Histo2dMain {
 
 		SwingUtilities.invokeLater(() -> {
 
-			final JFrame jframe = new JFrame("Histo compute shader use control panel to display it !!!!!!");
+			final JFrame jframe = new JFrame(
+					"Use histogram2d compute shader to build synthetic view of large dataset ( 1 to 5 million of record)");
 			jframe.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosing(WindowEvent windowevent) {

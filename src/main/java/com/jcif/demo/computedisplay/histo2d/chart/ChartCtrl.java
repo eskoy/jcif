@@ -8,6 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
+import javax.swing.SwingWorker;
+import javax.swing.SwingWorker.StateValue;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +35,8 @@ public class ChartCtrl implements MtoVCallBack, ViewProvider, ChartCallback {
 	protected BackGroundCtrl backGroundCtrl = new BackGroundCtrl();
 
 	protected Histo2dCtrl histo2dCtrl;
+
+	protected StateValue updatestateValue;
 
 	@Override
 	public Histo2dModel getHistoModel() {
@@ -91,8 +96,31 @@ public class ChartCtrl implements MtoVCallBack, ViewProvider, ChartCallback {
 	@Override
 	public void modelToView() {
 
-		histo2dCtrl.modelToView();
-		gLPainterController.repaint();
+		final long time = System.currentTimeMillis();
+		if (updatestateValue == null || updatestateValue == StateValue.DONE) {
+			SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+				@Override
+				public Boolean doInBackground() {
+
+					histo2dCtrl.reduceModel();
+
+					return true;
+				}
+
+				@Override
+				public void done() {
+					gLPainterController.repaint();
+					long newtime = System.currentTimeMillis() - time;
+					System.err.println(
+							"Time to compute & diplay histo is in ms " + newtime + " " + Thread.currentThread());
+					updatestateValue = this.getState();
+
+				}
+			};
+
+			worker.execute();
+
+		}
 
 	}
 
